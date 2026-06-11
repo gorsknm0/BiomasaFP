@@ -2,7 +2,7 @@
 #'
 #' Functions to estimate biomass from diameter, height and wood density. If specifying a new function please include all these parameters, even if they are not used (as other functions will pass all these arguments to the function)
 #'
-#' @param d numeric vector giving tree diameter (DBH) in cm
+#' @param d numeric vector giving tree diameter (DBH) in mm
 #' @param h numeric vector giving tree height (m)
 #' @param wd numeric vector giving wood density in g/m^3
 
