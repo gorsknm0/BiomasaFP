@@ -2,7 +2,7 @@
 #'
 #' Functions to estimate biomass from diameter, height and wood density. If specifying a new function please include all these parameters, even if they are not used (as other functions will pass all these arguments to the function)
 #'
-#' @param d numeric vector giving tree diameter (DBH) in cm
+#' @param d numeric vector giving tree diameter (DBH) in mm
 #' @param h numeric vector giving tree height (m)
 #' @param wd numeric vector giving wood density in g/m^3
 
@@ -39,6 +39,13 @@ GoodmanPalm<-function(d,h,wd){
   ln.AGB<--3.3488+(2.7483*log(d/10))
   return((exp(ln.AGB))/1000)
 }
+
+
+#' @describeIn AGBChv14 Typical Cerrado equation for Extra.Diameter (basal) and local heights, equation from Rezende et. al. 2006. (see Rezende et al. 2006. Comparação de modelos matemáticos para estimativa do volume, biomassa e estoque de carbono da vegetação lenhosa de um cerrado sensu stricto em Brasília, DF. Scientia Forestalis, n. 71, p. 65-76, agosto 2006  )
+AGBRezende06<-function(d,h,wd){
+  (-0.49129 + 0.02912 * ((d/10) ^2 ) * h) / 1000
+}
+
 
 
 
