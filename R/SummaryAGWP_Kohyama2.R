@@ -13,6 +13,7 @@
 
 
 SummaryAGWP_Kohyama2<-function(xdataset, AGBEquation, dbh ="D4",height.data=NULL,palm.eq=TRUE,treefern=TRUE){
+  if (missing(dbh) && any(sapply(extra_d4_funs, identical, AGBEquation))) dbh <- "Extra.D4"
   if(all.equal(AGBEquation,BA)==TRUE & palm.eq==TRUE){
     stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq to FALSE")
   }

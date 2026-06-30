@@ -46,6 +46,10 @@ AGBRezende06<-function(d,h,wd){
   (-0.49129 + 0.02912 * ((d/10) ^2 ) * h) / 1000
 }
 
+# Allometric equations that require Extra.D4 as the default dbh.
+# Add new equations here; CalcAGB and all SummaryAGWP functions will pick them up automatically.
+extra_d4_funs <- list(AGBRezende06)
+
 
 
 

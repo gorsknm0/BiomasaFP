@@ -25,6 +25,7 @@
 
 
 CalcAGB <- function (xdataset, dbh = "D4",height.data=NULL,AGBFun=AGBChv14){
+         if (missing(dbh) && any(sapply(extra_d4_funs, identical, AGBFun))) dbh <- "Extra.D4"
          cdf <- xdataset
          ## Clean file
          cdf <- CleaningCensusInfo(xdataset)
