@@ -38,6 +38,5 @@ So while there is more you can do with the package (see https://martin-sullivan.
 `# Calculate AGB, AGWP etc`
 
 `SummaryAGWP(dat)`
-test
 
 
