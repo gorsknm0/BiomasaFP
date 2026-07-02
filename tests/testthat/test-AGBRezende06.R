@@ -43,5 +43,6 @@ test_that("multiplication works", {
 # Add your tests below
 # ---------------------------------------------
 test_that("AGBRezende06 works 1", {
-  expect_equal(AGBRezende06(d=121, h=3.9), 0.0161362)
+  expect_equal(AGBRezende06(d=121, h=3.9), 0.01613620088)
 })
+
