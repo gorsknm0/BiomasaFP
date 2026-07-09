@@ -44,17 +44,71 @@ test_that("multiplication works", {
 # ---------------------------------------------
 library(dplyr)
 library(readr)
+library(usethis)
+library(devtools)
 
-
+#-----------------------------------------------
 # 1. test the equation works for 1 tree with specified d and h
+#------------------------------------------------
 test_that("AGBRezende06 works 1", {
   expect_equal(round(AGBRezende06(d=121, h=3.9),4), round(0.01613620088,4)) ### allow to 4dp
 })
 
 
-# 2. test the equation works for CalcAGB() for test plot 5 with diameter and height specified
+
+# --------------------------------------------------
+# 2.a. test that mergefp() function runs successfully
+# --------------------------------------------------
+#
+test_that("mergefp runs without error", {
+#
+#   # Load or create some example data
+  trees<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/treedata_cerrado.csv")
+#str(trees)
+#head(trees$`Census Date`)
+  md<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/plotmd_cerrado.csv")
+  wd<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/wd_cerrado.csv")
 
 
-# 3. test the equation works for CalcAGB() for test plot 5 with default d (should be Extra.D4 for this equation)
+#
+#   # Run the function
+   result <- mergefp(trees, md, wd)
+#
+#   # Check that the output is a data frame
+   expect_true(is.data.frame(result))
+ })
+
+
+
+
+# ------------------------------------------------
+# 2.b. test that calcAGB() function runs successfully
+# ------------------------------------------------
+
+#test_that("CalcAGB runs without error for Rezende06", {
+  #
+  #   # Load or create some example data
+      # str(result2a)
+#  trees<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/treedata_cerrado.csv")
+  #str(trees)
+  #head(trees$`Census Date`)
+#  md<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/plotmd_cerrado.csv")
+#  wd<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/wd_cerrado.csv")
+#  dat <- mergefp(trees, md, wd)
+#  plot5 <-dat %>%
+#    filter(PlotCode == "TGP-29")
+
+  #    Run the function
+ #  result <- CalcAGB(plot5, AGBFun = AGBRezende06, dbh = "Extra.D4" )#, height.data = "Height")
+  #
+  #   # Check that the output is a data frame
+#   expect_true(is.data.frame(result))
+# })
+
+
+# 3. test the equation works for CalcAGB() for test plot 5 with diameter and height specified
+
+
+# 4. test the equation works for CalcAGB() for test plot 5 with default d (should be Extra.D4 for this equation)
 
 
