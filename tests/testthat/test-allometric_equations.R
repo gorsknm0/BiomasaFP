@@ -85,30 +85,85 @@ test_that("mergefp runs without error", {
 # 2.b. test that calcAGB() function runs successfully
 # ------------------------------------------------
 
-#test_that("CalcAGB runs without error for Rezende06", {
+test_that("CalcAGB runs without error for Rezende06", {
   #
   #   # Load or create some example data
       # str(result2a)
-#  trees<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/treedata_cerrado.csv")
+ trees<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/treedata_cerrado.csv")
   #str(trees)
   #head(trees$`Census Date`)
-#  md<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/plotmd_cerrado.csv")
-#  wd<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/wd_cerrado.csv")
-#  dat <- mergefp(trees, md, wd)
-#  plot5 <-dat %>%
-#    filter(PlotCode == "TGP-29")
+ md<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/plotmd_cerrado.csv")
+ wd<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/wd_cerrado.csv")
+ dat <- mergefp(trees, md, wd)
+ plot5 <-dat %>%
+   filter(PlotCode == "TGP-29") # this plot only has ExtraD (no D)
 
   #    Run the function
- #  result <- CalcAGB(plot5, AGBFun = AGBRezende06, dbh = "Extra.D4" )#, height.data = "Height")
+ result <- CalcAGB(plot5, AGBFun = AGBRezende06)#, dbh = "Extra.D4") #, height.data = "Height")
   #
   #   # Check that the output is a data frame
-#   expect_true(is.data.frame(result))
-# })
+  expect_true(is.data.frame(result))
+  })
 
 
-# 3. test the equation works for CalcAGB() for test plot 5 with diameter and height specified
+
+#---------------------------------------------
+# 3. test the equation results for CalcAGB() for test plot 5 with extra diameter specified is the same as default (no d specified)
+#---------------------------------------------
+
+test_that("CalcAGB runs without error for Rezende06", {
+  #
+  #   # Load or create some example data
+  # str(result2a)
+  trees<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/treedata_cerrado.csv")
+  #str(trees)
+  #head(trees$`Census Date`)
+  md<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/plotmd_cerrado.csv")
+  wd<-read.csv("C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/cerrado/wd_cerrado.csv")
+  dat <- mergefp(trees, md, wd)
+  plot5 <-dat %>%
+    filter(PlotCode == "TGP-29")# this plot only has ExtraD (no D)
+
+  #    Run the function
+  result1 <- CalcAGB(plot5, AGBFun = AGBRezende06)
+  result2 <- CalcAGB(plot5, AGBFun = AGBRezende06, dbh = "Extra.D4")
+  #
+  #   # Check that the output is a data frame
+  expect_equal(result1$AGBInd, result2$AGBInd)
+})
 
 
-# 4. test the equation works for CalcAGB() for test plot 5 with default d (should be Extra.D4 for this equation)
 
 
+
+#---------------------------------------------
+# 4. test the equation works for CalcAGB() with real heights specified (and check results match manual workings)
+#---------------------------------------------
+
+
+
+#------------------------------------------
+# 5. test the equation works for SummaryAGWP
+#------------------------------------------
+
+
+
+#-----------------------------------------
+# 6. test the equation results for summary AGWP match the query library
+# ----------------------------------------
+
+
+#----------------------------------------
+# 7. test if work for a plot with no extra D
+# --------------------------------------
+
+
+#----------------------------------------
+# 8. test if work for multiple plots different Ds etc
+# ---------------------------------------
+
+
+####------------------------------------------------------------####
+####------------------------------------------------------------####
+
+## REPEAT ALL TESTS BUT FOR Chv14 and check get same results in old verion of BiomasaFP
