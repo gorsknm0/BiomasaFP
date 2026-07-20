@@ -3,7 +3,7 @@
 #' @param htdata Dataframe containing height measurements.
 #' @param level Level to fit height-diameter model. One of "Plot", "Cluster", "BioR" and "Continent".
 #' @param weib.only Logical. Should the search for the best model be constrained to Weibull models. If TRUE, log-log models are only selected when neither Weibull models converge. Default is FALSE.
-#' @param thresh thresh argument to be passed to /code{fit.weib.models}
+#' @param thresh thresh argument to be passed to \code{fit.weib.models}
 #' @param forest.type Logical. If true (default), level is constrained to be within a particular forest type/
 #' @return Dataframe with estimated parameters, number of height measurments used to fit the models and the error at estimating AGB compared to AGB estimates using observed heights (in units of Mg per tree). Parameters of the 'best' model (i.e. lowest AGB prediction error) are also given.
 #' @author Martin Sullivan
