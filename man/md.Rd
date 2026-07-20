@@ -26,17 +26,28 @@ A data frame with 2 rows and 25 variables:
       (e.g. \code{"Terra Firma"}).}
     \item{ForestEdaphicID}{Numeric forest edaphic type
       identifier.}
+    \item{ForestEdaphicHeightName}{Forest edaphic type name
+      used for height-diameter allometry
+      (e.g. \code{"Terra Firma"}).}
+    \item{ForestEdaphicHeightID}{Numeric forest edaphic type
+      identifier used for height-diameter allometry.}
     \item{ForestElevationName}{Forest elevation class name
       (e.g. \code{"Lowland"}).}
     \item{ForestElevationID}{Numeric forest elevation class
       identifier.}
-    \item{BiogeographicalRegionName}{Biogeographical region name.}
-    \item{BiogeographicalRegionID}{Numeric biogeographical region
-      identifier.}
+    \item{ForestElevationHeightName}{Forest elevation class
+      name used for height-diameter allometry
+      (e.g. \code{"Lowland"}).}
+    \item{ForestElevationHeightID}{Numeric forest elevation
+      class identifier used for height-diameter allometry.}
+    \item{BiogeographicalRegionName}{Biogeographical region
+      name (e.g. \code{"Western Amazon"}).}
+    \item{BiogeographicalRegionID}{Numeric biogeographical
+      region identifier.}
     \item{RegionName}{Broad region name
       (e.g. \code{"Amazonia, W"}).}
-    \item{AllometricRegionID}{Allometric region identifier, used to
-      look up height-diameter parameters in
+    \item{AllometricRegionID}{Allometric region identifier,
+      used to look up height-diameter parameters in
       \code{\link{WeibullHeightParameters}}.}
   }
 }

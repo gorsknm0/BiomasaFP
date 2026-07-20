@@ -5,31 +5,121 @@
 \alias{trees}
 \title{Example tree census data}
 \format{
-A data frame with 8099 rows and 68 variables. Key variables
-  include:
+A data frame with 8099 rows and 68 variables:
   \describe{
+    \item{Continent}{Continent name.}
+    \item{Country}{Country name.}
     \item{PlotID}{Unique numeric plot identifier.}
+    \item{Plot.Code}{Character plot code
+      (e.g. \code{"JEN-11"}).}
     \item{PlotViewID}{Unique numeric plot-view identifier.}
-    \item{Plot.Code}{Character plot code (e.g. \code{"JEN-11"}).}
+    \item{Plot.Name}{Full descriptive name of the plot.}
+    \item{Plot.View.Name}{Name of the plot view
+      (e.g. \code{"Main Plot View"}).}
+    \item{PI}{Principal investigator(s) associated with the
+      plot, semicolon-separated.}
     \item{TreeID}{Unique numeric stem identifier.}
-    \item{Census.No}{Census number (integer).}
-    \item{Census.Date}{Decimal year of census.}
+    \item{Tag.No}{Field tag number for the stem.}
+    \item{Sub.Plot.T1}{Sub-plot identifier at the first
+      hierarchical level.}
+    \item{Sub.Plot.T2}{Sub-plot identifier at the second
+      hierarchical level (often \code{NA}).}
+    \item{Standardised.SubPlot.T1}{Standardised sub-plot
+      identifier.}
+    \item{X}{X-coordinate of the stem within the plot (m).}
+    \item{Y}{Y-coordinate of the stem within the plot (m).}
+    \item{Standardised.X}{Standardised X-coordinate within
+      the plot (m).}
+    \item{Standardised.Y}{Standardised Y-coordinate within
+      the plot (m).}
+    \item{AllometricRegionID}{Allometric region identifier,
+      used to look up height-diameter parameters in
+      \code{\link{WeibullHeightParameters}}.}
     \item{Family}{Accepted plant family name.}
     \item{Genus}{Accepted genus name.}
-    \item{Species}{Accepted species name.}
-    \item{AllometricRegionID}{Allometric region identifier, used to
-      look up height-diameter parameters in
-      \code{\link{WeibullHeightParameters}}.}
-    \item{D1, D2, D3, D4}{Diameter measurements at successive
-      quality-control steps (mm). \code{D4} is the recommended
-      diameter for biomass calculations.}
-    \item{Extra.D4}{Basal (extra) diameter measurement (mm), used
-      by equations in \code{\link{extra_d4_funs}}.}
-    \item{POM}{Point of measurement (mm above ground).}
-    \item{F1}{Recruitment flag: \code{"n"} indicates a new recruit.}
-    \item{F4}{Point-of-measurement change flag: \code{"6"} indicates
-      a POM change.}
+    \item{Species}{Accepted binomial species name.}
+    \item{Sub.Species}{Sub-species name (empty string if
+      none).}
+    \item{Variety}{Variety name (usually \code{NA}).}
+    \item{Original.Identification}{Original field
+      identification as recorded by the collector.}
+    \item{Recommended.Family}{Recommended accepted family
+      name from the ForestPlots.net taxonomy.}
+    \item{Recommended.Species}{Recommended accepted species
+      name from the ForestPlots.net taxonomy.}
+    \item{Recommended.Subspecies}{Recommended accepted
+      sub-species name (empty string if none).}
+    \item{Recommended.Variety}{Recommended variety name
+      (usually \code{NA}).}
+    \item{FamilyAPGID}{Numeric family identifier in the APG
+      classification system.}
+    \item{GenusID}{Numeric genus identifier.}
+    \item{SpeciesID}{Numeric species identifier.}
+    \item{SubSpeciesID}{Numeric sub-species identifier
+      (usually \code{NA}).}
+    \item{Census.No}{Census number (integer), starting at 1
+      for the first census of each plot.}
+    \item{Census.Date}{Decimal year of the census.}
+    \item{Voucher.Code}{Herbarium voucher code(s) associated
+      with the stem.}
+    \item{Stem.Group.ID}{Group identifier linking stems of a
+      multi-stemmed tree (usually \code{NA}).}
+    \item{Main.Stem.Tag}{Tag number of the main stem in a
+      multi-stemmed tree (usually \code{NA}).}
+    \item{D0}{Raw diameter as entered in the field (mm).}
+    \item{D1}{Diameter after the first quality-control step
+      (mm).}
+    \item{DPOMtMinus1}{Diameter measured at the point of
+      measurement used in the previous census (mm).}
+    \item{D2}{Diameter after the second quality-control step
+      (mm).}
+    \item{D3}{Diameter after the third quality-control step
+      (mm).}
+    \item{D4}{Diameter after the fourth quality-control step
+      (mm); recommended diameter for biomass calculations.}
+    \item{POM0}{Original point of measurement as entered in
+      the field (mm above ground).}
+    \item{POM}{Point of measurement used for this census (mm
+      above ground).}
+    \item{F1}{Stem status flag. \code{"a"}: alive survivor;
+      \code{"n"}: new recruit (first record); \code{"p"}:
+      prior recruit.}
+    \item{F2}{Measurement quality flag.}
+    \item{F3}{Diameter quality-control flag (integer code;
+      0 = no issue).}
+    \item{F4}{Point-of-measurement change flag (integer code;
+      6 = POM changed since previous census).}
+    \item{Extra.D0}{Extra (basal) raw diameter as entered in
+      the field (mm); used for Cerrado-type vegetation.}
+    \item{Extra.D}{Extra (basal) diameter (mm).}
+    \item{Extra.DPOMtMinus1}{Extra diameter at the previous
+      census point of measurement (mm).}
+    \item{Extra.D2}{Extra diameter after the second
+      quality-control step (mm).}
+    \item{Extra.D3}{Extra diameter after the third
+      quality-control step (mm).}
+    \item{Extra.D4}{Extra (basal) diameter after the fourth
+      quality-control step (mm); used by allometric equations
+      in \code{\link{extra_d4_funs}}.}
+    \item{Extra.POM0}{Original extra point of measurement
+      (mm above ground).}
+    \item{Extra.POM}{Extra point of measurement for this
+      census (mm above ground).}
+    \item{Extra.F3}{Diameter quality-control flag for the
+      extra measurement.}
+    \item{Extra.F4}{Point-of-measurement change flag for the
+      extra measurement.}
+    \item{CI}{Census interval flag (character).}
+    \item{LI}{Light index recorded at the stem.}
+    \item{CF}{Crown flag.}
+    \item{CD1}{Crown diameter measurement 1.}
+    \item{CD2}{Crown diameter measurement 2.}
     \item{Height}{Tree height (m), where measured.}
+    \item{F5}{Height measurement quality flag.}
+    \item{Height.Broken.At}{Height at which a broken or
+      leaning tree was measured (m).}
+    \item{Comments}{Free-text comments associated with the
+      stem record.}
   }
 }
 \source{
