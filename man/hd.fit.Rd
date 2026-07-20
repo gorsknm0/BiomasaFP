@@ -13,7 +13,7 @@ hd.fit(htdata, level, weib.only = FALSE, thresh = 20, forest.type = TRUE)
 
 \item{weib.only}{Logical. Should the search for the best model be constrained to Weibull models. If TRUE, log-log models are only selected when neither Weibull models converge. Default is FALSE.}
 
-\item{thresh}{thresh argument to be passed to /code{fit.weib.models}}
+\item{thresh}{thresh argument to be passed to \code{fit.weib.models}}
 
 \item{forest.type}{Logical. If true (default), level is constrained to be within a particular forest type/}
 }
