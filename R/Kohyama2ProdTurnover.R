@@ -62,7 +62,7 @@ productivity <- function(dbh1, dbh2, w1, w2, t, area, Alive,Recruit) {
   B <- Bw / area
 
   # Standardized maximum tree mass for initial population
-  W_max <- as.numeric(quantile(w1[ri != 1], 0.99)) # Mg
+  W_max <- as.numeric(stats::quantile(w1[ri != 1], 0.99)) # Mg
 
   # turnover rates
   r <- try(turnover_est(si + ri, si, t),silent=TRUE)
