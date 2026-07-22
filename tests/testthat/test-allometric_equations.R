@@ -568,6 +568,7 @@ test_that("SummaryAGWP() runs without error for Rezende06 1 singlecensus plot wi
   expect_equal(nrow(result), 1)
   expect_equal(ncol(result), 20)
 })
+# note that prev version of package doesn't run on 1 single census plot so consider changing test result?
 
 
 ###---- 5a. ii) select settings ExtraD
