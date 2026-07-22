@@ -555,24 +555,21 @@ test_that("CalcAGB results for Rezende06 (local heights) only have NA for dead t
 #----
 # 5. test the equation works for SummaryAGWP
 #
-##---- 5.a test the SummaryAGWP runs successfully for Rezende06, 1 plot multicensus extraD only
+##---- 5.a test the SummaryAGWP runs successfully for Rezende06, 1 plot singlecensus extraD only
 ###----     i) default settings
-test_that("SummaryAGWP() runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, default settings", {
+test_that("SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with only ExtraD no issues, default settings", {
   #   # Load or create some example data
-  plot2 <-dat %>%
-    filter(PlotCode == "TGP-26") # this plot only has ExtraD (no D)
+  plot5 <-dat %>%
+    filter(PlotCode == "TGP-29") # this plot only has ExtraD (no D)
   #    Run the function
-  result <- SummaryAGWP(plot2, AGBEquation =AGBRezende06)#, dbh = "Extra.D4") #, height.data = "Height")
+  result <- SummaryAGWP(plot5, AGBEquation =AGBRezende06)#, dbh = "Extra.D4") #, height.data = "Height")
   #   # Check that the output is a data frame
   expect_true(is.data.frame(result))
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 1)
   expect_equal(ncol(result), 20)
 })
 
-plot2 <-dat %>%
-  filter(PlotCode == "TGP-26") # this plot only has ExtraD (no D)
-#    Run the function
-result <- SummaryAGWP(plot2, AGBEquation = AGBRezende06, dbh="Extra.D4")
+
 
 
 
