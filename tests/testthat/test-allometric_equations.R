@@ -543,8 +543,14 @@ test_that("CalcAGB results for Rezende06 (local heights) only have NA for dead t
 
 #write.csv(result, "C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/coding_checks_cerrado/result_RezendeCalcAGB_localheights.csv")
 
+##----4 e. test the equation results for CalcAGB() for a plot that only includes ExtraD , local heights only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
+#
 
-##----4 e. test the equation results for CalcAGB() DEAD STEMS all plots local heights only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
+### NOT YET DONE AS LOCAL HEIGHTS NOT ADDED FOR EXTRAD
+
+
+
+##----4 f. test the equation results for CalcAGB() DEAD STEMS all plots local heights only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
 #
 #
 
@@ -707,7 +713,7 @@ test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot both 
 test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
   #   # Load or create some example data
   plot3 <-dat %>%
-    filter(PlotCode == "TGP-27") # this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-27") # this plot is multicensus and only has D (no extra d)
   #    Run the function
   result <- SummaryAGWP(plot3, AGBEquation = AGBRezende06 )#, dbh = "Extra.D4") #, height.data = "Height")
   #   # Check that the output is a data frame
@@ -721,7 +727,7 @@ test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot lacki
 test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
   #   # Load or create some example data
   plot3 <-dat %>%
-    filter(PlotCode == "TGP-27") # this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-27") # this plot is multicensus and only has D (no exta d)
   #    Run the function
   result <- SummaryAGWP(plot3, AGBFEquation = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
   #   # Check that the output is a data frame
@@ -736,7 +742,7 @@ test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus lacking Ex
 test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
   #   # Load or create some example data
   plot3 <-dat %>%
-    filter(PlotCode == "TGP-27")# this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-27")# this plot is multicensus and only has D (no extra D)
   heightplot3<-plot3 %>%
     mutate(F5 = case_when(is.na(F5)~ NA,
                           TRUE ~ 5))
@@ -755,7 +761,7 @@ test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus plot lacki
 test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
   #   # Load or create some example data
   plot3 <-dat %>%
-    filter(PlotCode == "TGP-27")# this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-27")# this plot is multicensus and only has D (no extra D)
   heightplot3<-plot3 %>%
     mutate(F5 = case_when(is.na(F5)~ NA,
                           TRUE ~ 5))
@@ -771,12 +777,12 @@ test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot lacki
 
 
 ####
-##---- 5e. CalcAGB REZENDE06 1 MULTICENSUS plot With issues: NO RECRUITS
+##---- 5e. SummaryAGWP REZENDE06 1 MULTICENSUS plot With issues: NO RECRUITS
 ###----  i) default settings
 test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, default settings", {
   #   # Load or create some example data
   plot7 <-dat %>%
-    filter(PlotCode == "TGP-37") # this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-37") # this plot is multicensus and has both Ds but no recruits
   #    Run the function
   result <- SummaryAGWP(plot7, AGBEquation = AGBRezende06 )#, dbh = "Extra.D4") #, height.data = "Height")
   #   # Check that the output is a data frame
@@ -791,7 +797,7 @@ test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot no re
 test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
   #   # Load or create some example data
   plot7 <-dat %>%
-    filter(PlotCode == "TGP-37") # this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-37") # this plot is multicensus and has both Ds but no recruits
   #    Run the function
   result <- SummaryAGWP(plot7, AGBEquation = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
   #   # Check that the output is a data frame
@@ -806,7 +812,7 @@ test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus no recruit
 test_that("SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, local height", {
   #   # Load or create some example data
   plot7 <-dat %>%
-    filter(PlotCode == "TGP-37")# this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-37")# this plot is multicensus and has both Ds but no recruits
   heightplot7<-plot7 %>%
     mutate(F5 = case_when(is.na(F5)~ NA,
                           TRUE ~ 5))
@@ -825,7 +831,7 @@ test_that("SummaryAGWP runs without error for Rezende06 1 multicensus no recruit
 test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
   #   # Load or create some example data
   plot7 <-dat %>%
-    filter(PlotCode == "TGP-37")# this plot is multicensus and only has ExtraD (no D)
+    filter(PlotCode == "TGP-37")# this plot is multicensus and has both Ds but no recruits
   heightplot7<-plot7 %>%
     mutate(F5 = case_when(is.na(F5)~ NA,
                           TRUE ~ 5))
