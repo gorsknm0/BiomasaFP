@@ -38,13 +38,13 @@ CalcAGB <- function (xdataset, dbh = "D4",height.data=NULL,AGBFun=AGBChv14){
  		cdf<-merge(cdf,height.data,by="TreeID",all.x=TRUE)
      	}
          #Estimate height
-         cdf$HtF <- ifelse(cdf$D1 > 0 | cdf$Alive == 1, height.mod(cdf[,dbh],data=cdf), NA)
+         cdf$HtF <- ifelse(cdf[,dbh] > 0 | cdf$Alive == 1, height.mod(cdf[,dbh],data=cdf), NA)
          #Add dead and recruits when codes are improved
          dbh_d <- paste(dbh,"_D", sep="")
          cdf$Htd <- ifelse(cdf$CensusStemDied==cdf$Census.No, height.mod(cdf[,dbh_d],data=cdf), NA)
 
          # Calculate AGB by stem Alive type
-         cdf$AGBind <- ifelse(cdf$D1>0 & cdf$Alive == 1 & (cdf$CensusStemDied>cdf$Census.No | is.na(cdf$IsSnapped)),
+         cdf$AGBind <- ifelse(cdf[,dbh]>0 & cdf$Alive == 1 & (cdf$CensusStemDied>cdf$Census.No | is.na(cdf$IsSnapped)),
 			AGBFun(d=cdf[,dbh],h=cdf$HtF,wd=cdf$WD),
                               NA)
          #cdf$AGBAl <-  ifelse(cdf$Alive == 1, cdf$AGBind, NA)

@@ -1,6 +1,4 @@
-##TEST GP 30June
-
-# BiomasaFP
+# BiomasaFP (test)
 Functions to analyse data from www.ForestPlots.net.
 
 **BiomasaFP** can:
