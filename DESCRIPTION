@@ -11,6 +11,7 @@ LazyData: true
 Depends: 
     R (>= 2.10)
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    dplyr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
