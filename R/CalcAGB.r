@@ -1,3 +1,5 @@
+utils::globalVariables("WeibullHeightParameters")
+
 #' Estimate aboveground biomass of trees
 #'
 #' \code{CalcAGB} estimates the aboveground biomass of each tree in the merged ForestPlots output dataset using the selected allometric equation.
@@ -22,7 +24,6 @@
 #'
 #' @export
 #' @author Gabriela Lopez-Gonzalez, Martin Sullivan
-
 
 CalcAGB <- function (xdataset, dbh = "D4",height.data=NULL,AGBFun=AGBChv14){
          if (missing(dbh) && any(sapply(extra_d4_funs, identical, AGBFun))) dbh <- "Extra.D4"
