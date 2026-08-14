@@ -12,13 +12,16 @@ local.heights(
   thresh = 20,
   na.too.big = FALSE,
   laser.cor = FALSE,
-  no.plot = TRUE
+  no.plot = TRUE,
+  f1.exclude.codes = c("b", "c", "d", "j", "k"),
+  f3.exclude.codes = c(3),
+  f5.exclude.codes = c(1, 2)
 )
 }
 \arguments{
 \item{xdataset}{Object returned by \code{\link{mergefp}}.}
 
-\item{dbh}{Character giving the name of the column contining the diameter measurements. Defaults to "D4".}
+\item{dbh}{Character giving the name of the column containing the diameter measurements. Defaults to "D4".}
 
 \item{use.height.constrain}{Logical. Should height constrain function be used when selecting best model. Defaul is FALSE.}
 
@@ -31,6 +34,12 @@ local.heights(
 \item{laser.cor}{Logical. Should laser heights be adjusted to correct for bias. Default is FALSE.}
 
 \item{no.plot}{Logial. Should the best parameters exclude plot and cluster level. Default is TRUE.}
+
+\item{f1.exclude.codes}{Vector of ForestPlots Flag 1 codes, relating to tree alive status. Observations where Flag 1 contains one or more of these codes will be excluded from height-diameter model fitting. Set as NULL if you do not wish to exclude any trees based on Flag 1 codes. Default is "b" (broken),"c" (leaning),"d" (fallen),"j" (burnt) and "k" (snapped)}
+
+\item{f3.exclude.codes}{Vector of ForestPlots Flag 3 codes, relating to diameter measurement method. Observations where Flag 3 contains one or more of these codes will be excluded from height-diameter model fitting. Set as NULL if you do not wish to exclude any trees based on Flag 3 codes. Default is 3, i.e. excluding estimated measurements.}
+
+\item{f5.exclude.codes}{Vector of ForestPlots Flag 5 codes, relating to height measurement method. Observations where Flag 5 contains one or more of these codes will be excluded from height-diameter model fitting. Set as NULL if you do not wish to exclude any trees based on Flag 5 codes. Default is 1 (estimated) and 2 (clinometer, not carefully trained).}
 }
 \value{
 Dataframe with best parameters for height-diameter models for each row in xdataset.
