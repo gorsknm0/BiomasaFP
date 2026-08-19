@@ -1,19 +1,22 @@
 #' @title local.heights
 #' @description Wrapper function for estimating heights using local allometric equations.
 #' @param xdataset Object returned by \code{\link{mergefp}}.
-#' @param dbh Character giving the name of the column contining the diameter measurements. Defaults to "D4".
+#' @param dbh Character giving the name of the column containing the diameter measurements. Defaults to "D4".
 #' @param use.height.constrain Logical. Should height constrain function be used when selecting best model. Defaul is FALSE.
 #' @param max.size max.size argument to \code{\link{height.constrain}}.
 #' @param thresh thresh argument to \code{\link{fit.weib.models}}.
 #' @param na.too.big na.too.big argumet to \code{\link{height.constrain}}.
 #' @param laser.cor Logical. Should laser heights be adjusted to correct for bias. Default is FALSE.
 #' @param no.plot Logial. Should the best parameters exclude plot and cluster level. Default is TRUE.
+#' @param f1.exclude.codes Vector of ForestPlots Flag 1 codes, relating to tree alive status. Observations where Flag 1 contains one or more of these codes will be excluded from height-diameter model fitting. Set as NULL if you do not wish to exclude any trees based on Flag 1 codes. Default is "b" (broken),"c" (leaning),"d" (fallen),"j" (burnt) and "k" (snapped)
+#' @param f3.exclude.codes Vector of ForestPlots Flag 3 codes, relating to diameter measurement method. Observations where Flag 3 contains one or more of these codes will be excluded from height-diameter model fitting. Set as NULL if you do not wish to exclude any trees based on Flag 3 codes. Default is 3, i.e. excluding estimated measurements.
+#' @param f5.exclude.codes Vector of ForestPlots Flag 5 codes, relating to height measurement method. Observations where Flag 5 contains one or more of these codes will be excluded from height-diameter model fitting. Set as NULL if you do not wish to exclude any trees based on Flag 5 codes. Default is 1 (estimated) and 2 (clinometer, not carefully trained).
 #' @return Dataframe with best parameters for height-diameter models for each row in xdataset.
 #' @author Martin Sullivan
 
 #' @export
 
-local.heights<-function(xdataset,dbh="D4",use.height.constrain=FALSE,max.size=80,thresh=20,na.too.big=FALSE,laser.cor=FALSE,no.plot=TRUE){
+local.heights<-function(xdataset,dbh="D4",use.height.constrain=FALSE,max.size=80,thresh=20,na.too.big=FALSE,laser.cor=FALSE,no.plot=TRUE, f1.exclude.codes=c("b","c","d","j","k"),f3.exclude.codes=c(3),f5.exclude.codes=c(1,2)){
 data<-xdataset
 data$FT<-paste(data$ForestMoistureID,data$ForestEdaphicHeightID,data$ForestElevationHeightID,sep="")
 data$ID.clust<-paste(data$ClusterID,data$FT,sep="_")
@@ -24,6 +27,7 @@ data$ID.continent<-paste(data$Continent,data$FT,sep="_")
 data$Alive <- as.numeric (ifelse(data$F2==1, 1 ,0))
 TreesHt <- data[data$Height>0 & data$Alive==1 & data$D1>90 & data$D1<5000    & !is.na(data$Height) & data$Height<90
                    & data$Monocot==0 &  !is.na(data$F5), ]
+# Not using this bit for filtering as allowing user to manually set options for height method. But still used to identify laser height measurements in laser.cor section.
 TreesHt$Method<- ifelse(TreesHt$F5==1 | TreesHt$F5==2,1,
                         ifelse(TreesHt$F5==6,6,
                                ifelse( TreesHt$F5==3, 3,4
@@ -32,17 +36,45 @@ TreesHt$Method<- ifelse(TreesHt$F5==1 | TreesHt$F5==2,1,
 	)
 
 # Exclude F3-3
-TreesHt <- TreesHt[ grepl('3',TreesHt$F3)==FALSE,  ]
-# Exclude F4 not like '60' or '0' or '2'
-TreesHt <- TreesHt[ grepl('0',TreesHt$F4)==TRUE|grepl('06',TreesHt$F4)==TRUE |grepl('2',TreesHt$F4)==TRUE ,  ]
-# Exclude f1 flag1= b, c, d, j, k
-htdata <- TreesHt[ grepl('b',TreesHt$F1)==FALSE & grepl('c',TreesHt$F1)==FALSE &
-                            grepl('d',TreesHt$F1)==FALSE & grepl('j',TreesHt$F1)==FALSE&
-                            grepl('k',TreesHt$F1)==FALSE
-                    ,  ]
+#TreesHt <- TreesHt[ grepl('3',TreesHt$F3)==FALSE,  ]
+# Modified to allow user control via f3.exclude.codes
+if(is.null(f3.exclude.codes) || length(f3.exclude.codes)==0){
+  TreesHt<-TreesHt
+}else{
+  pattern3<-paste(f3.exclude.codes,collapse="|")
+  TreesHt<-TreesHt[!grepl(pattern3,TreesHt$F3),]
+}
 
-#Exclude treeswith method 1
-htdata <- htdata[!(htdata$Method==1),]
+
+# Exclude F4 not like '60' or '0' or '2'
+# Not allowing user control over this as these are no-brainer filters
+TreesHt <- TreesHt[ grepl('0',TreesHt$F4)==TRUE|grepl('06',TreesHt$F4)==TRUE |grepl('2',TreesHt$F4)==TRUE ,  ]
+# Exclude f1 flag1
+# Defult is = b, c, d, j, k
+#htdata <- TreesHt[ grepl('b',TreesHt$F1)==FALSE & grepl('c',TreesHt$F1)==FALSE &
+#                            grepl('d',TreesHt$F1)==FALSE & grepl('j',TreesHt$F1)==FALSE&
+#                            grepl('k',TreesHt$F1)==FALSE
+#                    ,  ]
+
+# Change to now allow users to specific f1.exclude.codes
+if(is.null(f1.exclude.codes) || length(f1.exclude.codes)==0){
+  htdata<-TreesHt
+}else{
+pattern1<-paste(f1.exclude.codes,collapse="|")
+htdata<-TreesHt[!grepl(pattern1,TreesHt$F1),]
+}
+
+#REMOVED.... Exclude trees with method 1
+#htdata <- htdata[!(htdata$Method==1),]
+# New user defined f5 codes for excluding
+if(is.null(f5.exclude.codes) || length(f5.exclude.codes)==0){
+  htdata<-htdata
+}else{
+  pattern5<-paste(f5.exclude.codes,collapse="|")
+  htdata<-htdata[!grepl(pattern5,htdata$F5),]
+}
+
+
 
 #Correct laser measurements for bias
 if(laser.cor==TRUE){

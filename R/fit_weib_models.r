@@ -23,9 +23,9 @@ names(result)<-c("a_Weib","b_Weib","c_Weib","a_WeightWeib","b_WeightWeib","c_Wei
 wf<-try(nls(Height ~ a*(1-exp(-b*(Diameter/10)^c)),data=x,
                   na.action=na.omit,
                   start = c(a=25, b= 0.05, c= 0.7)),silent=TRUE)
-if(class(wf)=="try-error"){
+if(inherits(wf,"try-error")){
 x$wf.height<-NA
-wf.param<-c("NA","NA","NA")
+wf.param<-c(NA,NA,NA)
 }else{
 x$wf.height<-predict(wf)
 wf.param<-coef(wf)
@@ -36,9 +36,9 @@ wfw<-try(nls (Height ~ a*(1-exp(-b*(Diameter/10)^c)),
                   data=x,weights=weight.vec,
                   na.action=na.omit,
                   start = c(a=25, b= 0.05, c= 0.7)),silent=TRUE)
-if(class(wfw)=="try-error"){
+if(inherits(wfw,"try-error")){
 x$wfw.height<-NA
-wfw.param<-c("NA","NA","NA")
+wfw.param<-c(NA,NA,NA)
 }else{
 x$wfw.height<-predict(wfw)
 wfw.param<-coef(wfw)

@@ -7,6 +7,7 @@
 \alias{AGBChv05M}
 \alias{TiepoloTreeFern}
 \alias{GoodmanPalm}
+\alias{AGBRezende06}
 \title{Allometric equations}
 \usage{
 AGBChv14(d, h, wd)
@@ -20,9 +21,11 @@ AGBChv05M(d, h, wd)
 TiepoloTreeFern(d, h, wd)
 
 GoodmanPalm(d, h, wd)
+
+AGBRezende06(d, h, wd)
 }
 \arguments{
-\item{d}{numeric vector giving tree diameter (DBH) in cm}
+\item{d}{numeric vector giving tree diameter (DBH) in mm}
 
 \item{h}{numeric vector giving tree height (m)}
 
@@ -33,16 +36,18 @@ Functions to estimate biomass from diameter, height and wood density. If specify
 }
 \section{Functions}{
 \itemize{
-\item \code{AGBChv14}: Chave et al. 2014 equation with height (see Chave J, Rejou-Mechain M, Burquez A et al. 2014. Improved allometric models to estimate the aboveground biomass of tropical trees. Global Change Biology 20: 3177-3190. doi: 10.1111/gcb.12629)
+\item \code{AGBChv14()}: Chave et al. 2014 equation with height (see Chave J, Rejou-Mechain M, Burquez A et al. 2014. Improved allometric models to estimate the aboveground biomass of tropical trees. Global Change Biology 20: 3177-3190. doi: 10.1111/gcb.12629)
 
-\item \code{BA}: Basal area
+\item \code{BA()}: Basal area
 
-\item \code{wdBA}: Basal area weighted by wood density
+\item \code{wdBA()}: Basal area weighted by wood density
 
-\item \code{AGBChv05M}: Moist forest equation (without height) from Chave et al. 2005 (see Chave, J., Andalo, C., Brown, S. et al. Tree allometry and improved estimation of carbon stocks and balance in tropical forests. Oecologia 145, 87–99 (2005). https://doi.org/10.1007/s00442-005-0100-x)
+\item \code{AGBChv05M()}: Moist forest equation (without height) from Chave et al. 2005 (see Chave, J., Andalo, C., Brown, S. et al. Tree allometry and improved estimation of carbon stocks and balance in tropical forests. Oecologia 145, 87–99 (2005). https://doi.org/10.1007/s00442-005-0100-x)
 
-\item \code{TiepoloTreeFern}: Height-based tree fern equation from Tiepolo et al.2002 (see Tiepolo, G., M. Calmon, et al. (2002). Measuring  and monitoring  carbon  stocks  at  the  guaraqueçaba  climate  action project, Paraná, Brazil. International Symposium on Forest Carbon Sequestration and Monitoring, Extension Serie Taiwan Forestry Research Institute: 98-115.)
+\item \code{TiepoloTreeFern()}: Height-based tree fern equation from Tiepolo et al.2002 (see Tiepolo, G., M. Calmon, et al. (2002). Measuring  and monitoring  carbon  stocks  at  the  guaraqueçaba  climate  action project, Paraná, Brazil. International Symposium on Forest Carbon Sequestration and Monitoring, Extension Serie Taiwan Forestry Research Institute: 98-115.)
 
-\item \code{GoodmanPalm}: Diameter only palm equation from Goodman et al.2013 (see Goodman, R. et al. 2013. Amazon palm biomass and allometry, Forest Ecology and Management 310: 994-1004 https://doi.org/10.1016/j.foreco.2013.09.045)
+\item \code{GoodmanPalm()}: Diameter only palm equation from Goodman et al.2013 (see Goodman, R. et al. 2013. Amazon palm biomass and allometry, Forest Ecology and Management 310: 994-1004 https://doi.org/10.1016/j.foreco.2013.09.045)
+
+\item \code{AGBRezende06()}: Typical Cerrado equation for Extra.Diameter (basal) and local heights, equation from Rezende et. al. 2006. (see Rezende et al. 2006. Comparação de modelos matemáticos para estimativa do volume, biomassa e estoque de carbono da vegetação lenhosa de um cerrado sensu stricto em Brasília, DF. Scientia Forestalis, n. 71, p. 65-76, agosto 2006  )
+
 }}
-

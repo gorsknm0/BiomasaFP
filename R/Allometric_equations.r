@@ -46,8 +46,21 @@ AGBRezende06<-function(d,h,wd){
   (-0.49129 + 0.02912 * ((d/10) ^2 ) * h) / 1000
 }
 
-# Allometric equations that require Extra.D4 as the default dbh.
-# Add new equations here; CalcAGB and all SummaryAGWP functions will pick them up automatically.
+#' Allometric equations requiring Extra.D4 diameter
+#'
+#' A list of allometric equation functions that require the
+#' \code{Extra.D4} (basal diameter) measurement rather than the
+#' standard \code{D4} diameter. When one of these functions is passed
+#' as the \code{AGBFun} argument to \code{\link{CalcAGB}} or any of
+#' the \code{SummaryAGWP} family of functions, the diameter column is
+#' automatically switched from \code{"D4"} to \code{"Extra.D4"}.
+#'
+#' To register a new allometric equation that requires \code{Extra.D4},
+#' append it to this list.
+#'
+#' @format A list of functions.
+#' @seealso \code{\link{AGBChv14}}, \code{\link{CalcAGB}}
+#' @export
 extra_d4_funs <- list(AGBRezende06)
 
 
