@@ -843,7 +843,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     result <- SummaryAGWP(dat, AGBEquation = AGBRezende06 )#, dbh = "Extra.D4") #, height.data = "Height")
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 13)
+    expect_equal(nrow(result), 10) # prev was 13 but edited to 10 to exclude the plots with D only
     expect_equal(ncol(result), 20)
   })
 
@@ -856,7 +856,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     result <- SummaryAGWP(dat, AGBEquation = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 13)
+    expect_equal(nrow(result), 10)
     expect_equal(ncol(result), 20)
   })
 
@@ -874,7 +874,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     result <- SummaryAGWP(heightdat, AGBEquation = AGBRezende06, height.data = h.params)
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 13)
+    expect_equal(nrow(result), 10)
     expect_equal(ncol(result), 20)
   })
 
@@ -891,7 +891,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     result <- SummaryAGWP(heightdat, AGBEquation = AGBRezende06, dbh= "Extra.D4", height.data = h.params)
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 13)
+    expect_equal(nrow(result), 10)
     expect_equal(ncol(result), 20)
   })
 
