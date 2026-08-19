@@ -92,7 +92,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   })
 
   ###----   ii) select settings (Extra D4)
-  test_that("CalcAGB runs without error for Rezende06 1 plot no issues, specified Extra.D4", {
+  test_that("CalcAGB runs without error for Rezende06 1 plot  single census no issues (Extra D only), specified Extra.D4", {
     #   # Load or create some example data
     plot5 <-dat %>%
       filter(PlotCode == "TGP-29") # this plot only has ExtraD (no D)
@@ -106,6 +106,22 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2a. iii) select settings (Local Height)
+  test_that("CalcAGB runs without error for Rezende06 1 plot single census no issues (ExtraD only)  local height", {
+    #   # Load or create some example data
+    plot5 <-dat %>%
+      filter(PlotCode == "TGP-29") # this plot only has ExtraD (no D)
+    heightplot5<-plot5 %>%
+      mutate(F5 = case_when(is.na(F5)~ NA,
+                            TRUE ~ 5))
+    hts<-local.heights(heightplot5, no.plot=FALSE)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(heightplot5, AGBFun = AGBRezende06, height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), nrow(plot1))
+    expect_equal(ncol(result), (47+18))
+  })
 
   ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
 
