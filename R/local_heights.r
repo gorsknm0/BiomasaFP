@@ -25,7 +25,7 @@ data$ID.bio<-paste(data$BiogeographicalRegionID,data$FT,sep="_")
 data$ID.continent<-paste(data$Continent,data$FT,sep="_")
 #Filter to select height data
 data$Alive <- as.numeric (ifelse(data$F2==1, 1 ,0))
-TreesHt <- data[data$Height>0 & data$Alive==1 & data$D1>90 & data$D1<5000    & !is.na(data$Height) & data$Height<90
+TreesHt <- data[data$Height>0 & data$Alive==1 & data[,dbh]>90 & data[,dbh]<5000    & !is.na(data$Height) & data$Height<90
                    & data$Monocot==0 &  !is.na(data$F5), ]
 # Not using this bit for filtering as allowing user to manually set options for height method. But still used to identify laser height measurements in laser.cor section.
 TreesHt$Method<- ifelse(TreesHt$F5==1 | TreesHt$F5==2,1,
