@@ -80,7 +80,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   # ---- 2. test that calcAGB() function runs successfully
 
-  ##---- 2a. CalcAGB REZENDE06 1 plot with only ExtraD no issues single census
+  ##---- 2a. CalcAGB REZENDE06 1 plot single census with only ExtraD no issues single census
   ###----   i) default settings
   test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, default settings", {
     plot5 <- dat %>%
@@ -92,7 +92,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   })
 
   ###----   ii) select settings (Extra D4)
-  test_that("CalcAGB runs without error for Rezende06 1 plot  single census no issues (Extra D only), specified Extra.D4", {
+  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, specified Extra.D4", {
     #   # Load or create some example data
     plot5 <-dat %>%
       filter(PlotCode == "TGP-29") # this plot only has ExtraD (no D)
@@ -106,29 +106,39 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2a. iii) select settings (Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 plot single census no issues (ExtraD only)  local height", {
+
+  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, local height: extrad.4 and including estimates", {
     #   # Load or create some example data
     plot5 <-dat %>%
-      filter(PlotCode == "TGP-29") # this plot only has ExtraD (no D)
-    heightplot5<-plot5 %>%
-      mutate(F5 = case_when(is.na(F5)~ NA,
-                            TRUE ~ 5))
-    hts<-local.heights(heightplot5, no.plot=FALSE)
+      filter(PlotCode == "TGP-29")# this plot is multicensus and only has ExtraD (no D)
+    hts<-local.heights(plot5, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
     h.params<-hd.simplify(hts[[1]])
     #    Run the function
-    result <- CalcAGB(heightplot5, AGBFun = AGBRezende06, height.data = h.params)
+    result <- CalcAGB(plot5, AGBFun = AGBRezende06, height.data = h.params)
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
-    expect_equal(nrow(result), nrow(plot1))
+    expect_equal(nrow(result), nrow(plot5))
     expect_equal(ncol(result), (47+18))
   })
 
-  ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
+
 
   #####
   ###---- 2a. iv)  select settings (Extra D4 AND Local Height)
 
-  ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
+  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, specify ExtraD.4 and local height: extrad.4 and including estimates", {
+    #   # Load or create some example data
+    plot5 <-dat %>%
+      filter(PlotCode == "TGP-29")# this plot is multicensus and only has ExtraD (no D)
+    hts<-local.heights(plot5, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(plot5, AGBFun = AGBRezende06, dbh = "Extra.D4", height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), nrow(plot5))
+    expect_equal(ncol(result), (47+18))
+  })
 
   #####
   ##---- 2b. CalcAGB REZENDE06 1 MULTICENSUS plot with Extra D only no issues
@@ -161,12 +171,37 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ###---- 2b. iii)  select settings (Local Height)
 
-  ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
+  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, local height: extrad.4 and including estimates", {
+    #   # Load or create some example data
+    plot2 <-dat %>%
+      filter(PlotCode == "TGP-26")# this plot is multicensus and only has ExtraD (no D)
+    hts<-local.heights(plot2, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(plot2, AGBFun = AGBRezende06, height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), nrow(plot2))
+    expect_equal(ncol(result), (47+18))
+  })
+
 
   #####
   ###---- 2b. iv)  select settings (Extra D4 AND Local Height)
 
-  ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
+  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, specify ExtraD.4 and local height: extrad.4 and including estimates", {
+    #   # Load or create some example data
+    plot2 <-dat %>%
+      filter(PlotCode == "TGP-26")# this plot is multicensus and only has ExtraD (no D)
+    hts<-local.heights(plot2, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(plot2, AGBFun = AGBRezende06, dbh = "Extra.D4", height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), nrow(plot2))
+    expect_equal(ncol(result), (47+18))
+  })
 
   #####
   ##---- 2c. CalcAGB REZENDE06 1 MULTICENSUS plot with both Ds no issues
@@ -182,6 +217,8 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     expect_equal(nrow(result), nrow(plot1))
     expect_equal(ncol(result), (47+18))
   })
+
+
 
   #####
   ###----2c.ii) specified dbh = Extra.D4
@@ -199,7 +236,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2c. iii)  select settings (Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height", {
+  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with no specifications", {
     #   # Load or create some example data
     plot1 <-dat %>%
       filter(PlotCode == "TGP-36")# this plot is multicensus and only has ExtraD (no D)
@@ -216,7 +253,25 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     expect_equal(ncol(result), (47+18))
   })
 
-  # NOTE THAT THIS WORKS BUT PERHAPS IS PULLING FROM D4, check in later tests
+
+
+  ###  attempt repeat but using extra d4 for local heights and estimated heights
+
+  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with local heights on extrad4", {
+    #   # Load or create some example data
+    plot1 <-dat %>%
+      filter(PlotCode == "TGP-36")# this plot is multicensus and only has ExtraD (no D)
+    hts<-local.heights(plot1, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(plot1, AGBFun = AGBRezende06, height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), nrow(plot1))
+    expect_equal(ncol(result), (47+18))
+  })
+
+  # THIS NOW WORKS WITH Extra.D4 and using estimated heights
 
   #####
   ###---- 2c. iv)  select settings (Extra D4 AND Local Height)
@@ -498,10 +553,30 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
                             TRUE ~ 5))
     hts<-local.heights(heightdat, no.plot=FALSE)
     h.params<-hd.simplify(hts[[1]])
-    pre_manualworkings<-CalcAGB(heightdat, AGBFun = AGBRezende06, height.data = h.params)
+    pre_manualworkings4b1<-CalcAGB(heightdat, AGBFun = AGBRezende06, height.data = h.params)
     #    Run the function
-    result <- CalcAGB(heightdat, AGBFun = AGBRezende06, height.data = h.params)
-    resultmanualworkings<- pre_manualworkings %>%
+    result4b1 <- CalcAGB(heightdat, AGBFun = AGBRezende06, height.data = h.params)
+    resultmanualworkings4b1<- pre_manualworkings4b1 %>%
+      mutate( AGBInd_manual = case_when(Extra.D4==0 ~ NA,
+                                        F1 == 0 ~ NA,
+                                        TRUE ~ (-0.49129 + 0.02912 * ((Extra.D4/10) ^2 ) * HtF) / 1000))
+    #   # Check that the output is a data frame
+    expect_equal(round(result4b1$AGBind,6), round(resultmanualworkings4b1$AGBInd_manual,6))
+  })
+
+
+  ## retest using ExtraD4 and local heights: extraD4 and include estimates
+
+  test_that("CalcAGB results for Rezende06 match the manual workings in the same file (local heights with extraD4 and include estimates)", {
+    #
+    #   # Load or create some data
+    dat
+    hts<-local.heights(dat, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    pre_manualworkings4b2<-CalcAGB(dat, AGBFun = AGBRezende06, height.data = h.params)
+    #    Run the function
+    result4b2 <- CalcAGB(dat, AGBFun = AGBRezende06, height.data = h.params)
+    resultmanualworkings4b2<- pre_manualworkings4b2 %>%
       mutate( AGBInd_manual = case_when(Extra.D4==0 ~ NA,
                                         F1 == 0 ~ NA,
                                         TRUE ~ (-0.49129 + 0.02912 * ((Extra.D4/10) ^2 ) * HtF) / 1000))
@@ -509,6 +584,10 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     expect_equal(round(result$AGBind,6), round(resultmanualworkings$AGBInd_manual,6))
   })
 
+  #write.csv(result4b1, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/result4b1.csv", na="")
+  #write.csv(result4b2, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/result4b2.csv", na="")
+  #write.csv(resultmanualworkings4b1, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/resultmanualworkings4b1.csv", na="")
+  #write.csv(resultmanualworkings4b2, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/resultmanualworkings4b2.csv", na="")
 
 
   ##----4 c. test the equation results for CalcAGB() all plots default settings only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
@@ -528,15 +607,13 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #
   #
 
-  test_that("CalcAGB results for Rezende06 (local heights) only have NA for dead trees or trees with 0 or NA Extra.D4", {
+  test_that("CalcAGB results for Rezende06 (local heights with ExtraD4 and including estimates) only have NA for dead trees or trees with 0 or NA Extra.D4", {
+
     dat
-    heightdat<-dat %>%
-      mutate(F5 = case_when(is.na(F5) ~ NA,
-                            TRUE ~ 5))
-    hts<-local.heights(heightdat, no.plot=FALSE)
+    hts<-local.heights(dat, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
     h.params<-hd.simplify(hts[[1]])
     #    Run the function
-    result <- CalcAGB(heightdat, AGBFun = AGBRezende06, height.data = h.params)
+    result <- CalcAGB(dat, AGBFun = AGBRezende06, height.data = h.params)
     na_condition <- result$F1 == 0 | is.na(result$Extra.D4) | result$Extra.D4 == 0
     # Rows meeting the condition should have NA AGBind
     expect_true(all(is.na(result$AGBind[na_condition])))
@@ -549,7 +626,20 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ##----4 e. test the equation results for CalcAGB() for a plot that only includes ExtraD , local heights only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
   #
 
-  ### NOT YET DONE AS LOCAL HEIGHTS NOT ADDED FOR EXTRAD
+  test_that("CalcAGB results for Rezende06 (local heights with ExtraD4 and including estimates) only have NA for dead trees or trees with 0 or NA Extra.D4 for a plot that only has ExtraDs", {
+    dat
+    dat_extraDonly<-dat %>%
+      filter(PlotCode=="TGP-26")
+    hts<-local.heights(dat_extraDonly, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(dat_extraDonly, AGBFun = AGBRezende06, height.data = h.params)
+    na_condition <- result$F1 == 0 | is.na(result$Extra.D4) | result$Extra.D4 == 0
+    # Rows meeting the condition should have NA AGBind
+    expect_true(all(is.na(result$AGBind[na_condition])))
+    # All other rows should have non-NA AGBind
+    expect_true(all(!is.na(result$AGBind[!na_condition])))
+  })
 
 
 
@@ -597,6 +687,22 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ###---- 5a. iii) select settings (Local Height)
 
   ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
+  test_that("SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with extra.D4 only,  local heights", {
+    #   # Load or create some example data
+    plot5 <-dat %>%
+      filter(PlotCode == "TGP-29") # this plot is multicensus and only has ExtraD (no D)
+    #    Run the function
+    hts<-local.heights(plot5, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- SummaryAGWP(plot5, AGBEquation = AGBRezende06, #dbh = "Extra.D4",
+                          height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result),1)
+    expect_equal(ncol(result), 20)
+  })
+
 
   #####
   ###---- 5a. iv)  select settings (Extra D4 AND Local Height)
@@ -633,13 +739,41 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5b. iii)  select settings (Local Height)
+  test_that("SummaryAGWP() runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified local heights", {
+    #   # Load or create some example data
+    plot2 <-dat %>%
+      filter(PlotCode == "TGP-26") # this plot is multicensus and only has ExtraD (no D)
+    #    Run the function
+    hts<-local.heights(plot2, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- SummaryAGWP(plot2, AGBEquation = AGBRezende06, #dbh = "Extra.D4",
+                          height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result),2)
+    expect_equal(ncol(result), 20)
+  })
 
-  ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
 
   #####
   ###---- 5b. iv)  select settings (Extra D4 AND Local Height)
+  test_that("SummaryAGWP() runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4, local heights", {
+    #   # Load or create some example data
+    plot2 <-dat %>%
+      filter(PlotCode == "TGP-26") # this plot is multicensus and only has ExtraD (no D)
+    #    Run the function
+    hts<-local.heights(plot2, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- SummaryAGWP(plot2, AGBEquation = AGBRezende06, dbh = "Extra.D4",
+                          height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result),2)
+    expect_equal(ncol(result), 20)
+  })
 
-  ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
 
   #####
   ##---- 5c. SummaryAGWP REZENDE06 1 MULTICENSUS plot with both Ds no issues
