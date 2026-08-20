@@ -35,6 +35,19 @@ stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq 
 	  AGBData[AGBData$Family=="Cyatheaceae",]$AGBind<-TiepoloTreeFern(h=AGBData[AGBData$Family=="Cyatheaceae","HtF"])
 	  AGBData[AGBData$Family=="Cyatheaceae",]$AGBDead<-TiepoloTreeFern(h=AGBData[AGBData$Family=="Cyatheaceae","Htd"])
 	}
+
+	# Check for single-census plots: recruits and deaths cannot be estimated
+	census_counts <- tapply(AGBData$Census.No, AGBData$PlotViewID, function(x) length(unique(x)))
+	if (all(census_counts == 1L)) {
+	  warning("Only single census data was available. AGB.ha and Stems.ha have been calculated, but recruits and deaths cannot be estimated.")
+	  IndAL   <- aggregate(Alive/PlotArea  ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+	  AGBAlive <- aggregate(AGBind/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+	  single_out <- merge(AGBAlive, IndAL, by = c("PlotViewID", "Census.No"), all.x = TRUE)
+	  names(single_out) <- c("PlotViewID", "Census.No", "AGB.ha", "Stems.ha")
+	  single_out$PlotCode <- xdataset[match(single_out$PlotViewID, xdataset$PlotViewID), "PlotCode"]
+	  return(single_out)
+	}
+
  	  IndAL <- aggregate (Alive/PlotArea ~ PlotViewID + Census.No,  data = AGBData, FUN=sum )
          AGBAlive <-aggregate (AGBind/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN=sum )
  	  AGBData$Census.prev<-AGBData[match(paste(AGBData$TreeID,AGBData$Census.No-1),paste(AGBData$TreeID,AGBData$Census.No)),"Census.Mean.Date"]
