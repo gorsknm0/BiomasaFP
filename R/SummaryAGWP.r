@@ -73,8 +73,23 @@ stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq 
  	  AGBData$Survive2<-ifelse(AGBData$Census.No>1 & AGBData$Recruit==0 & AGBData$Alive==1 & AGBData$Snapped==0,1,0)
  	  #Includes snapped trees - for stem dynamics
 	  AGBData$Survive<-ifelse(AGBData$Census.No>1 & AGBData$Recruit==0 & AGBData$Alive==1 ,1,0)
- 	  AGB.surv<-aggregate(Delta.AGB/PlotArea ~ PlotViewID + Census.No,  data = AGBData[AGBData$Survive2==1,], FUN=sum )
-  	  IndSurv<-aggregate(Survive/PlotArea ~ PlotViewID + Census.No,  data = AGBData, FUN=sum )
+          Survivors <- AGBData[AGBData$Survive2 == 1, ]
+          if (nrow(Survivors) > 0) {
+            AGB.surv <- aggregate(Delta.AGB/PlotArea ~ PlotViewID + Census.No, data = Survivors, FUN = sum)
+            IndSurv <- aggregate(Survive/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+          } else {
+            # No surviving trees: 0 for Census.No > 1, NA for Census.No == 1 (undefined)
+            census_template <- unique(AGBData[, c("PlotViewID", "Census.No")])
+            fill_val <- ifelse(census_template$Census.No > 1, 0, NA_real_)
+            AGB.surv <- data.frame(PlotViewID = census_template$PlotViewID,
+                                  Census.No  = census_template$Census.No,
+                                  check.names = FALSE)
+            AGB.surv[["Delta.AGB/PlotArea"]] <- fill_val
+            IndSurv <- data.frame(PlotViewID = census_template$PlotViewID,
+                                 Census.No  = census_template$Census.No,
+                                 check.names = FALSE)
+            IndSurv[["Survive/PlotArea"]] <- fill_val
+          }
  	  #Calculate mean WD per census
  	  WD<-aggregate(WD ~ PlotViewID + Census.No,  data = AGBData[AGBData$Alive==1,], FUN=function(x)mean(x,na.rm=T))
 
@@ -245,6 +260,13 @@ stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq 
 	mortality_cols <- c("AGBmort.ha", "Mortality.ha", "UnobsAGWPmort.ha", "Mortality.stem.year")
 	for (col in mortality_cols) {
 	  SummaryB[SummaryB$Census.No > 1 & is.na(SummaryB[[col]]), col] <- 0
+	}
+
+	# Survivor columns: 0 when Census.No > 1 but no survivals; always NA for Census.No == 1 (undefined)
+	survival_cols <- c("AGWPsurv.ha", "SurvivingStems.ha")
+	for (col in survival_cols) {
+	  SummaryB[SummaryB$Census.No > 1 & is.na(SummaryB[[col]]), col] <- 0
+	  SummaryB[SummaryB$Census.No == 1, col] <- NA
 	}
 	SummaryB$PlotCode<-xdataset[match(SummaryB$PlotViewID,xdataset$PlotViewID),"PlotCode"]
 
