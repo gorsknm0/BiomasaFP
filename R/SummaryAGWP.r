@@ -35,6 +35,19 @@ stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq 
 	  AGBData[AGBData$Family=="Cyatheaceae",]$AGBind<-TiepoloTreeFern(h=AGBData[AGBData$Family=="Cyatheaceae","HtF"])
 	  AGBData[AGBData$Family=="Cyatheaceae",]$AGBDead<-TiepoloTreeFern(h=AGBData[AGBData$Family=="Cyatheaceae","Htd"])
 	}
+
+	# Check for single-census plots: recruits and deaths cannot be estimated
+	census_counts <- tapply(AGBData$Census.No, AGBData$PlotViewID, function(x) length(unique(x)))
+	if (all(census_counts == 1L)) {
+	  warning("Only single census data was available. AGB.ha and Stems.ha have been calculated, but recruits and deaths cannot be estimated.")
+	  IndAL   <- aggregate(Alive/PlotArea  ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+	  AGBAlive <- aggregate(AGBind/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+	  single_out <- merge(AGBAlive, IndAL, by = c("PlotViewID", "Census.No"), all.x = TRUE)
+	  names(single_out) <- c("PlotViewID", "Census.No", "AGB.ha", "Stems.ha")
+	  single_out$PlotCode <- xdataset[match(single_out$PlotViewID, xdataset$PlotViewID), "PlotCode"]
+	  return(single_out)
+	}
+
  	  IndAL <- aggregate (Alive/PlotArea ~ PlotViewID + Census.No,  data = AGBData, FUN=sum )
          AGBAlive <-aggregate (AGBind/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN=sum )
  	  AGBData$Census.prev<-AGBData[match(paste(AGBData$TreeID,AGBData$Census.No-1),paste(AGBData$TreeID,AGBData$Census.No)),"Census.Mean.Date"]
@@ -60,55 +73,94 @@ stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq 
  	  AGBData$Survive2<-ifelse(AGBData$Census.No>1 & AGBData$Recruit==0 & AGBData$Alive==1 & AGBData$Snapped==0,1,0)
  	  #Includes snapped trees - for stem dynamics
 	  AGBData$Survive<-ifelse(AGBData$Census.No>1 & AGBData$Recruit==0 & AGBData$Alive==1 ,1,0)
- 	  AGB.surv<-aggregate(Delta.AGB/PlotArea ~ PlotViewID + Census.No,  data = AGBData[AGBData$Survive2==1,], FUN=sum )
-  	  IndSurv<-aggregate(Survive/PlotArea ~ PlotViewID + Census.No,  data = AGBData, FUN=sum )
+          Survivors <- AGBData[AGBData$Survive2 == 1, ]
+          if (nrow(Survivors) > 0) {
+            AGB.surv <- aggregate(Delta.AGB/PlotArea ~ PlotViewID + Census.No, data = Survivors, FUN = sum)
+            IndSurv <- aggregate(Survive/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+          } else {
+            # No surviving trees: 0 for Census.No > 1, NA for Census.No == 1 (undefined)
+            census_template <- unique(AGBData[, c("PlotViewID", "Census.No")])
+            fill_val <- ifelse(census_template$Census.No > 1, 0, NA_real_)
+            AGB.surv <- data.frame(PlotViewID = census_template$PlotViewID,
+                                  Census.No  = census_template$Census.No,
+                                  check.names = FALSE)
+            AGB.surv[["Delta.AGB/PlotArea"]] <- fill_val
+            IndSurv <- data.frame(PlotViewID = census_template$PlotViewID,
+                                 Census.No  = census_template$Census.No,
+                                 check.names = FALSE)
+            IndSurv[["Survive/PlotArea"]] <- fill_val
+          }
  	  #Calculate mean WD per census
  	  WD<-aggregate(WD ~ PlotViewID + Census.No,  data = AGBData[AGBData$Alive==1,], FUN=function(x)mean(x,na.rm=T))
 
 
  	  # Find Recruits
-         Recruits<- AGBData[AGBData$Recruit==1,]
-         if(rec.meth==100){
- 	AGBRec <- aggregate (AGWPRec/PlotArea ~ PlotViewID + Census.No,  data = Recruits, FUN=sum ) 	# NOTE: divides by PlotArea, so you get value per ha !!
- 	}else{
- 	AGBRec <- aggregate (AGBind/PlotArea ~ PlotViewID + Census.No,  data = Recruits, FUN=sum )
- 	}
-         colnames(AGBRec) <- c('PlotViewID','Census.No','AGBRec.PlotArea')
-         IndRec <- aggregate (Recruit/PlotArea ~ PlotViewID + Census.No,  data = Recruits, FUN=sum )
+        Recruits <- AGBData[AGBData$Recruit == 1, ]
+        if (nrow(Recruits) > 0) {
+          if (rec.meth == 100) {
+            AGBRec <- aggregate(AGWPRec/PlotArea ~ PlotViewID + Census.No, data = Recruits, FUN = sum)  # NOTE: divides by PlotArea, so you get value per ha !!
+          } else {
+            AGBRec <- aggregate(AGBind/PlotArea ~ PlotViewID + Census.No, data = Recruits, FUN = sum)
+          }
+          colnames(AGBRec) <- c('PlotViewID', 'Census.No', 'AGBRec.PlotArea')
+          IndRec <- aggregate(Recruit/PlotArea ~ PlotViewID + Census.No, data = Recruits, FUN = sum)
+          #merge recruit information
+          Recs <- merge(AGBRec, IndRec, by = c('PlotViewID', 'Census.No'), all.x = TRUE)
+        } else {
+          # No recruits in dataset: 0 for Census.No > 1 (none observed), NA for Census.No == 1 (undefined)
+          census_template <- unique(AGBData[, c("PlotViewID", "Census.No")])
+          fill_val <- ifelse(census_template$Census.No > 1, 0, NA_real_)
+          Recs <- data.frame(PlotViewID      = census_template$PlotViewID,
+                             Census.No       = census_template$Census.No,
+                             AGBRec.PlotArea = fill_val,
+                             check.names     = FALSE)
+          Recs[["Recruit/PlotArea"]] <- fill_val
+        }
 
-         #merge recruit information
-         Recs<- merge(AGBRec, IndRec, by =  c('PlotViewID','Census.No'), all.x=TRUE)
+        # Dead stems: get only stems that are dead and have an AGB_D, to count only dead trees once
+        DeadTrees <- AGBData[AGBData$Dead == 1 & !is.na(AGBData$D1_D), ]
+        AGBDe <- aggregate(AGBDead/PlotArea ~ PlotViewID + Census.No, data = AGBData, FUN = sum)
+        # growth.rate also needed later for unobserved recruits
+ 	  growth.rate <- SizeClassGrowth(xdataset, dbh = dbh)
 
-         # Dead stems  get only stems that are dead and have an AGB_D, to count only dead trees ones
-         DeadTrees <-AGBData[AGBData$Dead==1 & !is.na(AGBData$D1_D),]
-         #Match in size class growth rate
- 	  IndDead <- aggregate (Dead/PlotArea ~ PlotViewID + Census.No,  data = DeadTrees, FUN=sum )
-         AGBDe <-aggregate (AGBDead/PlotArea ~  PlotViewID + Census.No, data = AGBData, FUN=sum )
-         #merge Dead trees
-         Deads <- merge(AGBDe, IndDead, by = c('PlotViewID','Census.No'),all.x=TRUE)
+        if (nrow(DeadTrees) > 0) {
+          IndDead <- aggregate(Dead/PlotArea ~ PlotViewID + Census.No, data = DeadTrees, FUN = sum)
+          Deads <- merge(AGBDe, IndDead, by = c('PlotViewID', 'Census.No'), all.x = TRUE)
 
- 	  # Unobserved growth of dead trees
- 	  growth.rate<-SizeClassGrowth(xdataset,dbh=dbh)
- 	  dead2<-merge(DeadTrees,growth.rate,by="PlotViewID",all.x=T)
-         dead2$DBH.death<-ifelse(dead2[,paste(dbh,"_D",sep="")]<200,(dead2$Delta.time/2)*dead2$Class1,
- 		ifelse(dead2[,paste(dbh,"_D",sep="")]<400,(dead2$Delta.time/2)*dead2$Class2,
- 			(dead2$Delta.time/2)*dead2$Class3))
- 	  dead2$DBH.death<-dead2$DBH.death+dead2[,paste(dbh,"_D",sep="")]
- 	  dead2<-dead2[!is.na(dead2$TreeID),]
- 	  #Height at death
- 	  dead2$Height.dead<-height.mod(dead2$DBH.death,data=dead2)
- 	  #AGB at death
-	  dead2$AGB.death2<-AGBEquation(d=dead2$DBH.death,h=dead2$Height.dead,wd=dead2$WD)
-
- 	dead2<-dead2[!is.na(dead2$Monocot),]
- 	 if(palm.eq==TRUE){
- 		dead2$AGB.death2[dead2$Monocot==1]<-GoodmanPalm(dead2[dead2$Monocot==1,paste(dbh,"_D",sep="")])
- 	 }
- 	if(treefern==TRUE){
- 	    dead2[dead2$Family=="Cyatheaceae",]$AGB.death2<-TiepoloTreeFern(h=dead2[dead2$Family=="Cyatheaceae","Height.dead"])
- 	  }
- 	 dead2$Unobs.dead<-dead2$AGB.death2-dead2$AGBDead
- 	 unobs.dead<-aggregate(Unobs.dead/PlotArea~PlotViewID + Census.No, data = dead2, FUN=sum )
+          # Unobserved growth of dead trees
+          dead2 <- merge(DeadTrees, growth.rate, by = "PlotViewID", all.x = T)
+          dead2$DBH.death <- ifelse(dead2[,paste(dbh,"_D",sep="")]<200,(dead2$Delta.time/2)*dead2$Class1,
+            ifelse(dead2[,paste(dbh,"_D",sep="")]<400,(dead2$Delta.time/2)*dead2$Class2,
+              (dead2$Delta.time/2)*dead2$Class3))
+          dead2$DBH.death <- dead2$DBH.death + dead2[,paste(dbh,"_D",sep="")]
+          dead2 <- dead2[!is.na(dead2$TreeID),]
+          #Height at death
+          dead2$Height.dead <- height.mod(dead2$DBH.death, data = dead2)
+          #AGB at death
+          dead2$AGB.death2 <- AGBEquation(d=dead2$DBH.death, h=dead2$Height.dead, wd=dead2$WD)
+          dead2 <- dead2[!is.na(dead2$Monocot),]
+          if (palm.eq == TRUE) {
+            dead2$AGB.death2[dead2$Monocot==1] <- GoodmanPalm(dead2[dead2$Monocot==1, paste(dbh,"_D",sep="")])
+          }
+          if (treefern == TRUE) {
+            dead2[dead2$Family=="Cyatheaceae",]$AGB.death2 <- TiepoloTreeFern(h=dead2[dead2$Family=="Cyatheaceae","Height.dead"])
+          }
+          dead2$Unobs.dead <- dead2$AGB.death2 - dead2$AGBDead
+          unobs.dead <- aggregate(Unobs.dead/PlotArea ~ PlotViewID + Census.No, data = dead2, FUN = sum)
+        } else {
+          # No dead trees: set mortality columns to 0 for Census.No > 1, NA for Census.No == 1
+          census_template <- unique(AGBData[, c("PlotViewID", "Census.No")])
+          fill_val <- ifelse(census_template$Census.No > 1, 0, NA_real_)
+          IndDead_fill <- data.frame(PlotViewID = census_template$PlotViewID,
+                                    Census.No  = census_template$Census.No,
+                                    check.names = FALSE)
+          IndDead_fill[["Dead/PlotArea"]] <- fill_val
+          Deads <- merge(AGBDe, IndDead_fill, by = c('PlotViewID', 'Census.No'), all.x = TRUE)
+          unobs.dead <- data.frame(PlotViewID = census_template$PlotViewID,
+                                  Census.No  = census_template$Census.No,
+                                  check.names = FALSE)
+          unobs.dead[["Unobs.dead/PlotArea"]] <- fill_val
+        }
 
 
  	# merge all summaries
@@ -197,6 +249,25 @@ stop("Palm equation set to TRUE when calculating basal area. Please set palm.eq 
 		"AGWPrec.ha","Recruit.ha","AGBmort.ha","Mortality.ha","AGWPsurv.ha","SurvivingStems.ha","UnobsAGWPmort.ha","Mean.WD",			# NOTE: from mergeF
 		"Recruitment.stem.year","Mortality.stem.year","UnobsAGWPrec.ha","UnobsRecruits.ha","CensusInterval",						# NOTE: from tmp, all per ha as PlotArea weighted !
 		"AGWP.ha","AGWP.ha.year")
+
+	# Recruit columns: 0 when Census.No > 1 but no recruits observed; NA when Census.No == 1 (undefined)
+	recruit_cols <- c("AGWPrec.ha", "Recruit.ha", "Recruitment.stem.year", "UnobsAGWPrec.ha", "UnobsRecruits.ha")
+	for (col in recruit_cols) {
+	  SummaryB[SummaryB$Census.No > 1 & is.na(SummaryB[[col]]), col] <- 0
+	}
+
+	# Mortality columns: 0 when Census.No > 1 but no deaths observed; NA when Census.No == 1 (undefined)
+	mortality_cols <- c("AGBmort.ha", "Mortality.ha", "UnobsAGWPmort.ha", "Mortality.stem.year")
+	for (col in mortality_cols) {
+	  SummaryB[SummaryB$Census.No > 1 & is.na(SummaryB[[col]]), col] <- 0
+	}
+
+	# Survivor columns: 0 when Census.No > 1 but no survivals; always NA for Census.No == 1 (undefined)
+	survival_cols <- c("AGWPsurv.ha", "SurvivingStems.ha")
+	for (col in survival_cols) {
+	  SummaryB[SummaryB$Census.No > 1 & is.na(SummaryB[[col]]), col] <- 0
+	  SummaryB[SummaryB$Census.No == 1, col] <- NA
+	}
 	SummaryB$PlotCode<-xdataset[match(SummaryB$PlotViewID,xdataset$PlotViewID),"PlotCode"]
 
  	SummaryB
