@@ -77,7 +77,6 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     expect_equal(ncol(result), 47) # 47 = prev version of BiomasaFP + 3 new cols
   })
 
-
   # ---- 2. test that calcAGB() function runs successfully
 
   ##---- 2a. CalcAGB REZENDE06 1 plot single census with only ExtraD no issues single census
@@ -1095,5 +1094,89 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####------------------------------------------------------------####
 
   ## REPEAT ALL TESTS BUT FOR Chv14 and check get same results in old version of BiomasaFP
+
+  #---- 9. test the equation results for  Chave 2014 for all test data match results in old version of package:
+  #--- 9a.CalcAGB (default values)
+
+  calcagb_file<- "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/oldversion_ofpackage/agb_oldv.csv"
+
+  if (file.exists(calcagb_file)) {
+    test_that("CalcAGB all plots for Chave2014 matches the results in BiomasaFP previous version to 6dp", {
+      oldcalcagb <- read.csv(calcagb_file)
+      result <- CalcAGB(dat, AGBFun=AGBChv14)
+      resultsmatched <- result %>%
+        full_join(oldcalcagb, by = c("TreeID" , "Census.No" ))
+      expect_equal(round(resultsmatched$AGBind.x, 6), round(resultsmatched$AGBind.y, 6))
+    })
+  }
+
+
+  #--- 9b.SummaryAGWP (default values)
+
+
+  summaryagwp_file<- "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/oldversion_ofpackage/agwp_oldv.csv"
+
+  if (file.exists(summaryagwp_file)) {
+    test_that("SummaryAGWP all plots for Chave2014 matches the results in BiomasaFP previous version to 6dp", {
+      oldagwp <- read.csv(summaryagwp_file)
+      result <- SummaryAGWP(dat, AGBEquation=AGBChv14)
+      resultsmatched <- result %>%
+        full_join(oldagwp, by = c("PlotCode" , "Census.No" ))
+      expect_equal(round(resultsmatched$AGWP.ha.year.x, 6), round(resultsmatched$AGWP.ha.year.y, 6))
+    })
+  }
+
+
+  #---9c. Summary AGWP with local heights (estimates accepted/F5 replaced with 5 in old version)
+
+  agb<-CalcAGB(dat,AGBFun=AGBChv14)
+  agwp<-SummaryAGWP(dat, AGBChv14)
+
+  # Fit H-D allometries
+  hts<-local.heights(dat,no.plot=FALSE, f5.exclude.codes = NULL)
+
+  # Get height-diameter parameters for each tree
+  h.params<-hd.simplify(hts[[1]])
+  agwp_localheights<-SummaryAGWP(dat, AGBChv14)
+
+  test_that("CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
+    #   # Load or create some example data
+
+    heightdat<-dat %>%
+      mutate(F5 = case_when(is.na(F5)~ NA,
+                            TRUE ~ 5))
+    hts<-local.heights(heightdat, no.plot=FALSE)
+    h.params<-hd.simplify(hts[[1]])
+    #    Run the function
+    result <- CalcAGB(heightdat, AGBFun = AGBRezende06, height.data = h.params)
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), nrow(dat))
+    expect_equal(ncol(result), (47+18))
+  })
+
+  ql_file <- "C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/BiomasaFP_tests/QL_Cerrado_AGB_by_census_on_Extra_D4_Rezende_FPlotsQL.csv"
+
+  if (file.exists(ql_file)) {
+    test_that("SummaryAGWP AGB all plots for Rezende06 matches the results in ForestPlots Query Library to 3dp", {
+      QL <- read.csv(ql_file)
+      result <- SummaryAGWP(dat, AGBEquation = AGBRezende06)
+      resultsmatched <- result %>%
+        full_join(QL, by = c("PlotCode", "Census.No" = "CensusNo"))
+      expect_equal(round(resultsmatched$AGB.ha, 3), resultsmatched$AGB.Rezende.et.al.2006...Mg.DW.Ha.1.)
+    })
+  }
+
+
+  test_that("Summary AGWP runs without error for Rezende06 all test plots, default settings", {
+    #   # Load or create some example data
+    dat
+    #    Run the function
+    result <- SummaryAGWP(dat, AGBEquation = AGBRezende06 )#, dbh = "Extra.D4") #, height.data = "Height")
+    #   # Check that the output is a data frame
+    expect_true(is.data.frame(result))
+    expect_equal(nrow(result), 10) # prev was 13 but edited to 10 to exclude the plots with D only
+    expect_equal(ncol(result), 20)
+  })
 
 } # end of data-dependent tests block
