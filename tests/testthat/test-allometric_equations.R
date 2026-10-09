@@ -69,7 +69,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   dat   <- mergefp(trees, md, wd)
 
   # ---- pre test2:  test that mergefp() function runs successfully
-  test_that("mergefp runs without error", {
+  test_that("1. mergefp runs without error", {
     result <- mergefp(trees, md, wd)
     expect_true(is.data.frame(result))
     expect_equal(nrow(result), nrow(trees))
@@ -80,7 +80,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   ##---- 2a. CalcAGB REZENDE06 1 plot single census with only ExtraD no issues single census
   ###----   i) default settings
-  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, default settings", {
+  test_that(" 2ai. CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, default settings", {
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot only has ExtraD (no D)
     result <- CalcAGB(plot5, AGBFun = AGBRezende06)
     expect_true(is.data.frame(result))
@@ -89,7 +89,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   })
 
   ###----   ii) select settings (Extra D4)
-  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, specified Extra.D4", {
+  test_that("2aii. CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, specified Extra.D4", {
     #   # Load or create some example data
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot only has ExtraD (no D)
     #    Run the function
@@ -103,7 +103,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ###---- 2a. iii) select settings (Local Height)
 
-  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, local height: extrad.4 and including estimates", {
+  test_that("2aiii. CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, local height: extrad.4 and including estimates", {
     #   # Load or create some example data
     plot5 <-dat[dat$PlotCode == "TGP-29", ]# this plot is multicensus and only has ExtraD (no D)
     hts<-local.heights(plot5, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -121,7 +121,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ###---- 2a. iv)  select settings (Extra D4 AND Local Height)
 
-  test_that("CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, specify ExtraD.4 and local height: extrad.4 and including estimates", {
+  test_that("2aiv. CalcAGB runs without error for Rezende06 1 plot with only ExtraD no issues, specify ExtraD.4 and local height: extrad.4 and including estimates", {
     #   # Load or create some example data
     plot5 <-dat[dat$PlotCode == "TGP-29", ]# this plot is multicensus and only has ExtraD (no D)
     hts<-local.heights(plot5, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -137,7 +137,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ##---- 2b. CalcAGB REZENDE06 1 MULTICENSUS plot with Extra D only no issues
   ###----  i) default settings
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot with extra.D4 only, default settings", {
+  test_that("2bi. CalcAGB runs without error for Rezende06 1 multicensus plot with extra.D4 only, default settings", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -149,7 +149,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   })
 
   ###---- 2b. ii) select settings ExtraD
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4", {
+  test_that("2bii. CalcAGB runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -163,7 +163,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ###---- 2b. iii)  select settings (Local Height)
 
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, local height: extrad.4 and including estimates", {
+  test_that("2biii. CalcAGB runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, local height: extrad.4 and including estimates", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     hts<-local.heights(plot2, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -180,7 +180,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ###---- 2b. iv)  select settings (Extra D4 AND Local Height)
 
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, specify ExtraD.4 and local height: extrad.4 and including estimates", {
+  test_that("2biv. CalcAGB runs without error for Rezende06 1 multicensus plot with only ExtraD no issues, specify ExtraD.4 and local height: extrad.4 and including estimates", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     hts<-local.heights(plot2, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -196,7 +196,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ##---- 2c. CalcAGB REZENDE06 1 MULTICENSUS plot with both Ds no issues
   ###----  i) default settings
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, default settings", {
+  test_that("2ci. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, default settings", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -211,7 +211,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###----2c.ii) specified dbh = Extra.D4
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, dbh= Extra.D4", {
+  test_that("2cii. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, dbh= Extra.D4", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -224,7 +224,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2c. iii)  select settings (Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with no specifications", {
+  test_that("2ciii. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with no specifications", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot1 <- plot1
@@ -243,7 +243,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   ###  attempt repeat but using extra d4 for local heights and estimated heights
 
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with local heights on extrad4", {
+  test_that("2ciiiv2. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with local heights on extrad4", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     hts<-local.heights(plot1, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -260,7 +260,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2c. iv)  select settings (Extra D4 AND Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, select Extra.D4 and local height", {
+  test_that("2civ. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot1 <- plot1
@@ -278,7 +278,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 2d. CalcAGB REZENDE06 1 MULTICENSUS plot without ExtraDs
   ###----  i) default settings
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
+  test_that("2di. CalcAGB runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -291,7 +291,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2d.ii) specified dbh = Extra.D4
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
+  test_that("2dii. CalcAGB runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -305,7 +305,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2d. iii)  select settings (Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
+  test_that("2diii. CalcAGB runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot3 <- plot3
@@ -322,7 +322,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2d. iv)  select settings (Extra D4 AND Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
+  test_that("2div. CalcAGB runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot3 <- plot3
@@ -341,7 +341,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 2e. CalcAGB REZENDE06 1 MULTICENSUS plot With issues: NO RECRUITS
   ###----  i) default settings
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot no recruits, default settings", {
+  test_that("2ei. CalcAGB runs without error for Rezende06 1 multicensus plot no recruits, default settings", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -355,7 +355,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2e.ii) specified dbh = Extra.D4
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
+  test_that("2eii. CalcAGB runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -369,7 +369,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2e. iii)  select settings (Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
+  test_that("2eiii. CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot7 <- plot7
@@ -386,7 +386,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2e. iv)  select settings (Extra D4 AND Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
+  test_that("2eiv. CalcAGB runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot7 <- plot7
@@ -405,7 +405,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 2f. CalcAGB REZENDE06 ALL PLOTS together
   ###----  i) default settings
-  test_that("CalcAGB runs without error for Rezende06 all test plots, default settings", {
+  test_that("2fi. CalcAGB runs without error for Rezende06 all test plots, default settings", {
     #   # Load or create some example data
     dat
     #    Run the function
@@ -418,7 +418,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2f.ii) specified dbh = Extra.D4
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
+  test_that("2fii. CalcAGB runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
     #   # Load or create some example data
     dat
     #    Run the function
@@ -432,7 +432,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2f. iii)  select settings (Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
+  test_that("2fiii. CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
     #   # Load or create some example data
 
     heightdat <- dat
@@ -449,7 +449,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 2f. iv)  select settings (Extra D4 AND Local Height)
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
+  test_that("2fiv. CalcAGB runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
     #   # Load or create some example data
     heightdat <- dat
     heightdat$F5[!is.na(heightdat$F5)] <- 5
@@ -469,7 +469,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #
   #-
 
-  test_that("CalcAGB uses correct default diameter (Extra.D4) for Rezende06", {
+  test_that("3. CalcAGB uses correct default diameter (Extra.D4) for Rezende06", {
     #
     #   # Load or create some data
     dat
@@ -491,7 +491,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ##---- 4 a. test the equation results for CalcAGB() all plots match manual workings in the same file default settings (unable to test real heights as will only run on height parameters (not heights)
   #
 
-  test_that("CalcAGB results for Rezende06 match the manual workings in the same file (default settings)", {
+  test_that("4a CalcAGB results for Rezende06 match the manual workings in the same file (default settings)", {
     #
     #   # Load or create some data
     dat
@@ -501,18 +501,18 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     resultmanualworkings <- transform(pre_manualworkings,
       AGBInd_manual = ifelse(Extra.D4 == 0 | F1 == 0, NA,
                              (-0.49129 + 0.02912 * ((Extra.D4/10) ^2 ) * HtF) / 1000))
-    #   # Check that the output is a data frame
+    #   # Check that the output results for CalcAGB AGBind are correct
     expect_equal(round(result$AGBind,6), round(resultmanualworkings$AGBInd_manual,6))
   })
 
-  #write.csv(resultmanualworkings, "C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/coding_checks_cerrado/resultmanualworkings_RezendeCalcAGB.csv")
+  #write.csv(resultmanualworkings, "C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/Biomasa_Test_MSVisit/BiomasaFP_test_GP_NG_May2026/input_11June26/coding_checks_cerrado/resultmanualworkings_RezendeCalcAGB9Oct.csv")
 
 
   ##----4 b. test the equation results for CalcAGB() all plots match manual workings in the same file local heights(unable to test real heights as it )
   #
   #
 
-  test_that("CalcAGB results for Rezende06 match the manual workings in the same file (local heights)", {
+  test_that("4bi. CalcAGB results for Rezende06 match the manual workings in the same file (local heights)", {
     #
     #   # Load or create some data
     dat
@@ -533,7 +533,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   ## retest using ExtraD4 and local heights: extraD4 and include estimates
 
-  test_that("CalcAGB results for Rezende06 match the manual workings in the same file (local heights with extraD4 and include estimates)", {
+  test_that("4bii. CalcAGB results for Rezende06 match the manual workings in the same file (local heights with extraD4 and include estimates)", {
     #
     #   # Load or create some data
     dat
@@ -546,20 +546,20 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
       AGBInd_manual = ifelse(Extra.D4 == 0 | F1 == 0, NA,
                              (-0.49129 + 0.02912 * ((Extra.D4/10) ^2 ) * HtF) / 1000))
     #   # Check that the output is a data frame
-    expect_equal(round(result$AGBind,6), round(resultmanualworkings$AGBInd_manual,6))
+    expect_equal(round(result4b2$AGBind,6), round(resultmanualworkings4b2$AGBInd_manual,6))
   })
 
   #write.csv(result4b1, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/result4b1.csv", na="")
-  #write.csv(result4b2, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/result4b2.csv", na="")
+  #write.csv(result4b2, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/result4b2_9Oct.csv", na="")
   #write.csv(resultmanualworkings4b1, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/resultmanualworkings4b1.csv", na="")
-  #write.csv(resultmanualworkings4b2, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/resultmanualworkings4b2.csv", na="")
+  #write.csv(resultmanualworkings4b2, "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/local_heights/testing_results_20Aug2026/resultmanualworkings4b2_9Oct.csv", na="")
 
 
   ##----4 c. test the equation results for CalcAGB() all plots default settings only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
   #
   #
 
-  test_that("CalcAGB results for Rezende06 (default settings) only have NA for dead trees or trees with 0 or NA Extra.D4", {
+  test_that("4c. CalcAGB results for Rezende06 (default settings) only have NA for dead trees or trees with 0 or NA Extra.D4", {
     result <- CalcAGB(dat, AGBFun = AGBRezende06)
     na_condition <- result$F1 == 0 | is.na(result$Extra.D4) | result$Extra.D4 == 0
     # Rows meeting the condition should have NA AGBind
@@ -572,7 +572,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #
   #
 
-  test_that("CalcAGB results for Rezende06 (local heights with ExtraD4 and including estimates) only have NA for dead trees or trees with 0 or NA Extra.D4", {
+  test_that("4d. CalcAGB results for Rezende06 (local heights with ExtraD4 and including estimates) only have NA for dead trees or trees with 0 or NA Extra.D4", {
 
     dat
     hts<-local.heights(dat, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -591,7 +591,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ##----4 e. test the equation results for CalcAGB() for a plot that only includes ExtraD , local heights only contain NA for trees that are dead or have Extra.D4 = 0 or Extra.D4 = NA
   #
 
-  test_that("CalcAGB results for Rezende06 (local heights with ExtraD4 and including estimates) only have NA for dead trees or trees with 0 or NA Extra.D4 for a plot that only has ExtraDs", {
+  test_that("4e. CalcAGB results for Rezende06 (local heights with ExtraD4 and including estimates) only have NA for dead trees or trees with 0 or NA Extra.D4 for a plot that only has ExtraDs", {
     dat
     dat_extraDonly <- dat[dat$PlotCode == "TGP-26", ]
     hts<-local.heights(dat_extraDonly, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
@@ -620,7 +620,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #
   ##---- 5.a test the SummaryAGWP runs successfully for Rezende06, 1 plot singlecensus extraD only
   ###----     i) default settings
-  test_that("SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with only ExtraD no issues, default settings", {
+  test_that("5ai. SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with only ExtraD no issues, default settings", {
     #   # Load or create some example data
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot only has ExtraD (no D)
     #    Run the function
@@ -634,7 +634,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
 
   ###---- 5a. ii) select settings ExtraD
-  test_that("SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with extra.D4 only, specified Extra.D4", {
+  test_that("5aii. SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with extra.D4 only, specified Extra.D4", {
     #   # Load or create some example data
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -649,7 +649,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ###---- 5a. iii) select settings (Local Height)
 
   ## NOT YET ABLE TO DO FOR EXTRA.D4 predictor local heights
-  test_that("SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with extra.D4 only,  local heights", {
+  test_that("5aiii. SummaryAGWP() runs without error for Rezende06 1 singlecensus plot with extra.D4 only,  local heights", {
     #   # Load or create some example data
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -673,7 +673,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ##---- 5b. CalcAGB REZENDE06 1 MULTICENSUS plot with Extra D only no issues
   ###----  i) default settings
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot with extra.D4 only, default settings", {
+  test_that("5bi. SummaryAGWP runs without error for Rezende06 1 multicensus plot with extra.D4 only, default settings", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -685,7 +685,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   })
 
   ###---- 5b. ii) select settings ExtraD
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4", {
+  test_that("5bii. SummaryAGWP runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -698,7 +698,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5b. iii)  select settings (Local Height)
-  test_that("SummaryAGWP() runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified local heights", {
+  test_that("5biii. SummaryAGWP() runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified local heights", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -716,7 +716,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5b. iv)  select settings (Extra D4 AND Local Height)
-  test_that("SummaryAGWP() runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4, local heights", {
+  test_that("5biv. SummaryAGWP() runs without error for Rezende06 1 multicensus plot with extra.D4 only, specified Extra.D4, local heights", {
     #   # Load or create some example data
     plot2 <- dat[dat$PlotCode == "TGP-26", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -735,7 +735,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #####
   ##---- 5c. SummaryAGWP REZENDE06 1 MULTICENSUS plot with both Ds no issues
   ###----  i) default settings
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, default settings", {
+  test_that("5c1. SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, default settings", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -748,7 +748,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###----5c.ii) specified dbh = Extra.D4
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, dbh= Extra.D4", {
+  test_that("5cii. SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, dbh= Extra.D4", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
@@ -761,7 +761,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5c. iii)  select settings (Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, local height", {
+  test_that("5ciii. SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, local height", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot1 <- plot1
@@ -780,7 +780,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5c. iv)  select settings (Extra D4 AND Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, select Extra.D4 and local height", {
+  test_that("5civ. SummaryAGWP runs without error for Rezende06 1 multicensus plot both Ds, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
     heightplot1 <- plot1
@@ -798,7 +798,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 5d. SUMMARYAGWP REZENDE06 1 MULTICENSUS plot without ExtraDs
   ###----  i) default settings
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
+  test_that("5di. SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no extra d)
     #    Run the function
@@ -811,7 +811,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5d.ii) specified dbh = Extra.D4
-  test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
+  test_that("5dii. SUmmaryAGWP runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no exta d)
     #    Run the function
@@ -825,7 +825,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5d. iii)  select settings (Local Height)
-  test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
+  test_that("5diii. SUmmaryAGWP runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no extra D)
     heightplot3 <- plot3
@@ -842,7 +842,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5d. iv)  select settings (Extra D4 AND Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
+  test_that("5div. SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no extra D)
     heightplot3 <- plot3
@@ -861,7 +861,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 5e. SummaryAGWP REZENDE06 1 MULTICENSUS plot With issues: NO RECRUITS
   ###----  i) default settings
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, default settings", {
+  test_that("5ei. SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, default settings", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and has both Ds but no recruits
     #    Run the function
@@ -875,7 +875,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5e.ii) specified dbh = Extra.D4
-  test_that("SUmmaryAGWP runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
+  test_that("5eii. SUmmaryAGWP runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and has both Ds but no recruits
     #    Run the function
@@ -889,7 +889,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5e. iii)  select settings (Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, local height", {
+  test_that("5eiii. SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, local height", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and has both Ds but no recruits
     heightplot7 <- plot7
@@ -906,7 +906,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5e. iv)  select settings (Extra D4 AND Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
+  test_that("5eiv. SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot7 <- dat[dat$PlotCode == "TGP-37", ] # this plot is multicensus and has both Ds but no recruits
     heightplot7 <- plot7
@@ -925,7 +925,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 5f. CalcAGB REZENDE06 ALL PLOTS together
   ###----  i) default settings
-  test_that("Summary AGWP runs without error for Rezende06 all test plots, default settings", {
+  test_that("5fi. Summary AGWP runs without error for Rezende06 all test plots, default settings", {
     #   # Load or create some example data
     dat
     #    Run the function
@@ -938,7 +938,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5f.ii) specified dbh = Extra.D4
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
+  test_that("5fii. SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, dbh= Extra.D4", {
     #   # Load or create some example data
     dat
     #    Run the function
@@ -951,7 +951,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5f. iii)  select settings (Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, local height", {
+  test_that("5fiii. SummaryAGWP runs without error for Rezende06 1 multicensus no recruits, local height", {
     #   # Load or create some example data
 
     heightdat <- dat
@@ -968,7 +968,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
 
   #####
   ###---- 5f. iv)  select settings (Extra D4 AND Local Height)
-  test_that("SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
+  test_that("5fiv. SummaryAGWP runs without error for Rezende06 1 multicensus plot no recruits, select Extra.D4 and local height", {
     #   # Load or create some example data
     heightdat <- dat
     heightdat$F5[!is.na(heightdat$F5)] <- 5
@@ -993,7 +993,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   #
   #-
 
-  test_that("SummaryAGWP uses correct default diameter (Extra.D4) for Rezende06", {
+  test_that("6. SummaryAGWP uses correct default diameter (Extra.D4) for Rezende06", {
     #
     #   # Load or create some data
     dat
@@ -1014,7 +1014,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ql_file <- "C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/BiomasaFP_tests/QL_Cerrado_AGB_by_census_on_Extra_D4_Rezende_FPlotsQL.csv"
 
   if (file.exists(ql_file)) {
-    test_that("SummaryAGWP AGB all plots for Rezende06 matches the results in ForestPlots Query Library to 3dp", {
+    test_that("7. SummaryAGWP AGB all plots for Rezende06 matches the results in ForestPlots Query Library to 3dp", {
       QL <- read.csv(ql_file)
       result <- SummaryAGWP(dat, AGBEquation = AGBRezende06)
       resultsmatched <- merge(result, QL, by.x = c("PlotCode", "Census.No"),
@@ -1039,7 +1039,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   calcagb_file<- "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/oldversion_ofpackage/agb_oldv.csv"
 
   if (file.exists(calcagb_file)) {
-    test_that("CalcAGB all plots for Chave2014 matches the results in BiomasaFP previous version to 6dp", {
+    test_that("9a. CalcAGB all plots for Chave2014 matches the results in BiomasaFP previous version to 6dp", {
       oldcalcagb <- read.csv(calcagb_file)
       result <- CalcAGB(dat, AGBFun=AGBChv14)
       resultsmatched <- merge(result, oldcalcagb, by = c("TreeID", "Census.No"), all = TRUE)
@@ -1054,7 +1054,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   summaryagwp_file<- "C:/Users/georg/OneDrive - University of Leeds/FPTeam_Research/Martin_Sullivan_R/BiomasaFP_devel_workings/oldversion_ofpackage/agwp_oldv.csv"
 
   if (file.exists(summaryagwp_file)) {
-    test_that("SummaryAGWP all plots for Chave2014 matches the results in BiomasaFP previous version to 6dp", {
+    test_that("9b. SummaryAGWP all plots for Chave2014 matches the results in BiomasaFP previous version to 6dp", {
       oldagwp <- read.csv(summaryagwp_file)
       result <- SummaryAGWP(dat, AGBEquation=AGBChv14)
       resultsmatched <- merge(result, oldagwp, by = c("PlotCode", "Census.No"), all = TRUE)
@@ -1075,7 +1075,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   h.params<-hd.simplify(hts[[1]])
   agwp_localheights<-SummaryAGWP(dat, AGBChv14)
 
-  test_that("CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
+  test_that("9ci.  CalcAGB runs without error for Rezende06 1 multicensus no recruits, local height", {
     #   # Load or create some example data
 
     heightdat <- dat
@@ -1093,7 +1093,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ql_file <- "C:/Users/georg/OneDrive - University of Leeds/Git_link_research/ForestPlotsTeam/TeamMembers/Georgia/BiomasaFP/BiomasaFP_tests/QL_Cerrado_AGB_by_census_on_Extra_D4_Rezende_FPlotsQL.csv"
 
   if (file.exists(ql_file)) {
-    test_that("SummaryAGWP AGB all plots for Rezende06 matches the results in ForestPlots Query Library to 3dp", {
+    test_that("9cii. SummaryAGWP AGB all plots for Rezende06 matches the results in ForestPlots Query Library to 3dp", {
       QL <- read.csv(ql_file)
       result <- SummaryAGWP(dat, AGBEquation = AGBRezende06)
       resultsmatched <- merge(result, QL, by.x = c("PlotCode", "Census.No"),
@@ -1103,7 +1103,7 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   }
 
 
-  test_that("Summary AGWP runs without error for Rezende06 all test plots, default settings", {
+  test_that("9ciii. Summary AGWP runs without error for Rezende06 all test plots, default settings", {
     #   # Load or create some example data
     dat
     #    Run the function
