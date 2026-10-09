@@ -227,12 +227,10 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   test_that("2ciii. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, local height with no specifications", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
-    heightplot1 <- plot1
-    heightplot1$F5[!is.na(heightplot1$F5)] <- 5
-    hts<-local.heights(heightplot1, no.plot=FALSE)
+    hts<-local.heights(plot1, no.plot=FALSE, f5.exclude.codes = NULL)
     h.params<-hd.simplify(hts[[1]])
     #    Run the function
-    result <- CalcAGB(heightplot1, AGBFun = AGBRezende06, height.data = h.params)
+    result <- CalcAGB(plot1, AGBFun = AGBRezende06, height.data = h.params)
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
     expect_equal(nrow(result), nrow(plot1))
@@ -263,12 +261,10 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   test_that("2civ. CalcAGB runs without error for Rezende06 1 multicensus plot both Ds, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot1 <- dat[dat$PlotCode == "TGP-36", ] # this plot is multicensus and only has ExtraD (no D)
-    heightplot1 <- plot1
-    heightplot1$F5[!is.na(heightplot1$F5)] <- 5
-    hts<-local.heights(heightplot1, no.plot=FALSE)
+    hts<-local.heights(plot1, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
     h.params<-hd.simplify(hts[[1]])
     #    Run the function
-    result <- CalcAGB(heightplot1, AGBFun = AGBRezende06, dbh= "Extra.D4", height.data = h.params)
+    result <- CalcAGB(plot1, AGBFun = AGBRezende06, dbh= "Extra.D4", height.data = h.params)
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
     expect_equal(nrow(result), nrow(plot1))
@@ -278,63 +274,63 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 2d. CalcAGB REZENDE06 1 MULTICENSUS plot without ExtraDs
   ###----  i) default settings
-  test_that("2di. CalcAGB runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
+  test_that("2di. CalcAGB returns an error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
     #   # Load or create some example data
-    plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
-    #    Run the function
-    result <- CalcAGB(plot3, AGBFun = AGBRezende06 )#, dbh = "Extra.D4") #, height.data = "Height")
-    #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), nrow(plot3))
-    expect_equal(ncol(result), (47+18))
+    plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no ExtraD)
+    # Expect an error: default DBH for Rezende06 is Extra.D4, which is absent from this plot
+    # NOTE: this error is not yet implemented in CalcAGB - test will fail until function is updated
+    expect_error(
+      CalcAGB(plot3, AGBFun = AGBRezende06)
+    )
   })
 
   #####
   ###---- 2d.ii) specified dbh = Extra.D4
-  test_that("2dii. CalcAGB runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
+  test_that("2dii. CalcAGB returns an error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
-    result <- CalcAGB(plot3, AGBFun = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
+   # result <- CalcAGB(plot3, AGBFun = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
     #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), nrow(plot3))
-    expect_equal(ncol(result), (47+18))
+    #expect_true(is.data.frame(result))
+   # expect_equal(nrow(result), nrow(plot3))
+   # expect_equal(ncol(result), (47+18))
+    expect_error(
+      CalcAGB(plot3, AGBFun = AGBRezende06, dbh = "Extra.D4")
+    )
+
   })
 
 
   #####
   ###---- 2d. iii)  select settings (Local Height)
-  test_that("2diii. CalcAGB runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
+  test_that("2diii. CalcAGB returns an error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
-    heightplot3 <- plot3
-    heightplot3$F5[!is.na(heightplot3$F5)] <- 5
-    hts<-local.heights(heightplot3, no.plot=FALSE)
+    hts<-local.heights(plot3, no.plot=FALSE, f5.exclude.codes = NULL)
     h.params<-hd.simplify(hts[[1]])
     #    Run the function
-    result <- CalcAGB(heightplot3, AGBFun = AGBRezende06, height.data = h.params)
+    #result <- CalcAGB(plot3, AGBFun = AGBRezende06, height.data = h.params)
     #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), nrow(plot3))
-    expect_equal(ncol(result), (47+18))
+    #expect_true(is.data.frame(result))
+    #expect_equal(nrow(result), nrow(plot3))
+    #expect_equal(ncol(result), (47+18))
+    expect_error(
+      CalcAGB(plot3, AGBFun = AGBRezende06, height.data = h.params)
+    )
+
   })
 
   #####
   ###---- 2d. iv)  select settings (Extra D4 AND Local Height)
-  test_that("2div. CalcAGB runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
+  # note that not possible to run local heights becasue no extra.D4 in dataset
+  test_that("2div. local heights returns an error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 ", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has ExtraD (no D)
-    heightplot3 <- plot3
-    heightplot3$F5[!is.na(heightplot3$F5)] <- 5
-    hts<-local.heights(heightplot3, no.plot=FALSE)
-    h.params<-hd.simplify(hts[[1]])
-    #    Run the function
-    result <- CalcAGB(heightplot3, AGBFun = AGBRezende06, dbh= "Extra.D4", height.data = h.params)
-    #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), nrow(plot3))
-    expect_equal(ncol(result), (47+18))
+    expect_error(
+      local.heights(plot3, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
+    )
+
   })
 
 
