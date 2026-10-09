@@ -624,11 +624,14 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     #   # Load or create some example data
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot only has ExtraD (no D)
     #    Run the function
-    result <- SummaryAGWP(plot5, AGBEquation =AGBRezende06)#, dbh = "Extra.D4") #, height.data = "Height")
+    expect_warning(
+      result <- SummaryAGWP(plot5, AGBEquation = AGBRezende06),
+      "Only single census data was available"
+    )
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
     expect_equal(nrow(result), 1)
-    expect_equal(ncol(result), 20)
+    expect_equal(ncol(result), 5)
   })
   # note that prev version of package doesn't run on 1 single census plot so consider changing test result?
 
@@ -638,11 +641,14 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     #   # Load or create some example data
     plot5 <- dat[dat$PlotCode == "TGP-29", ] # this plot is multicensus and only has ExtraD (no D)
     #    Run the function
-    result <- SummaryAGWP(plot5, AGBEquation = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
+    expect_warning(
+    result <- SummaryAGWP(plot5, AGBEquation = AGBRezende06, dbh = "Extra.D4"), #, height.data = "Height")
+    "Only single census data was available"
+    )
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
     expect_equal(nrow(result),1)
-    expect_equal(ncol(result), 20)
+    expect_equal(ncol(result), 5)
   })
 
   #####
@@ -656,12 +662,15 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
     hts<-local.heights(plot5, no.plot=FALSE, dbh="Extra.D4", f5.exclude.codes = NULL)
     h.params<-hd.simplify(hts[[1]])
     #    Run the function
+    expect_warning(
     result <- SummaryAGWP(plot5, AGBEquation = AGBRezende06, #dbh = "Extra.D4",
-                          height.data = h.params)
+                          height.data = h.params),
+    "Only single census data was available"
+    )
     #   # Check that the output is a data frame
     expect_true(is.data.frame(result))
     expect_equal(nrow(result),1)
-    expect_equal(ncol(result), 20)
+    expect_equal(ncol(result), 5)
   })
 
 
