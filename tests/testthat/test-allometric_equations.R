@@ -807,63 +807,60 @@ if (file.exists(file.path(cerrado_dir, "treedata_cerrado.csv"))) {
   ####
   ##---- 5d. SUMMARYAGWP REZENDE06 1 MULTICENSUS plot without ExtraDs
   ###----  i) default settings
-  test_that("5di. SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
+  test_that("5di. SummaryAGWP will not run for Rezende06 1 multicensus plot lacking ExtraD4, default settings", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no extra d)
-    #    Run the function
-    result <- SummaryAGWP(plot3, AGBEquation = AGBRezende06 )#, dbh = "Extra.D4") #, height.data = "Height")
-    #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 2)
-    expect_equal(ncol(result), 20)
+    #    Run the function - expect an error since ExtraD4 is missing
+    expect_error(
+      SummaryAGWP(plot3, AGBEquation = AGBRezende06),
+      "no rows to aggregate" ## NB THIS WARNING WILL NEED UPDATING ONCE MS CREATES A MORE SPECIFIC ONE
+    )
   })
 
   #####
   ###---- 5d.ii) specified dbh = Extra.D4
-  test_that("5dii. SUmmaryAGWP runs without error for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
+  test_that("5dii. SummaryAGWP will not run for Rezende06 1 multicensus lacking Extra.D4, dbh= Extra.D4", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no exta d)
     #    Run the function
-    result <- SummaryAGWP(plot3, AGBFEquation = AGBRezende06, dbh = "Extra.D4") #, height.data = "Height")
-    #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 2)
-    expect_equal(ncol(result), 20)
+    expect_error(
+      SummaryAGWP(plot3, AGBEquation = AGBRezende06, dbh = "Extra.D4"), #, height.data = "Height")
+    "no rows to aggregate"
+    )
   })
 
 
   #####
   ###---- 5d. iii)  select settings (Local Height)
-  test_that("5diii. SUmmaryAGWP runs without error for Rezende06 1 multicensus plot lacking extra.D4, local height", {
+  test_that("5diii. SUmmaryAGWP will not run for Rezende06 1 multicensus plot lacking extra.D4, local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no extra D)
     heightplot3 <- plot3
     heightplot3$F5[!is.na(heightplot3$F5)] <- 5
     hts<-local.heights(heightplot3, no.plot=FALSE)
     h.params<-hd.simplify(hts[[1]])
-    #    Run the function
-    result <- SummaryAGWP(heightplot3, AGBEquation = AGBRezende06, height.data = h.params)
-    #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 2)
-    expect_equal(ncol(result),20)
+    #    Run the function and result
+    expect_error(
+    SummaryAGWP(heightplot3, AGBEquation = AGBRezende06, height.data = h.params),
+    "no rows to aggregate",
+    )
+
   })
 
   #####
   ###---- 5d. iv)  select settings (Extra D4 AND Local Height)
-  test_that("5div. SummaryAGWP runs without error for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
+  test_that("5div. SummaryAGWP will not run for Rezende06 1 multicensus plot lacking Extra.D4, select Extra.D4 and local height", {
     #   # Load or create some example data
     plot3 <- dat[dat$PlotCode == "TGP-27", ] # this plot is multicensus and only has D (no extra D)
     heightplot3 <- plot3
     heightplot3$F5[!is.na(heightplot3$F5)] <- 5
     hts<-local.heights(heightplot3, no.plot=FALSE)
     h.params<-hd.simplify(hts[[1]])
-    #    Run the function
-    result <- SummaryAGWP(heightplot3, AGBFun = AGBRezende06, dbh= "Extra.D4", height.data = h.params)
-    #   # Check that the output is a data frame
-    expect_true(is.data.frame(result))
-    expect_equal(nrow(result), 2)
-    expect_equal(ncol(result), 20)
+    #    Run the function and result
+    expect_error(
+    SummaryAGWP(heightplot3, AGBEquation = AGBRezende06, dbh= "Extra.D4", height.data = h.params),
+    "no rows to aggregate",
+    )
   })
 
 
